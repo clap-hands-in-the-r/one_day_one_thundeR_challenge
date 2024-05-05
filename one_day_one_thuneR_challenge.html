@@ -407,9 +407,9 @@ df &lt;- data.frame(x,y)
 
 aggregate(y~x, df, sum)</code></pre>
 <pre><code>##   x   y
-## 1 a 268
-## 2 b 355
-## 3 c  71</code></pre>
+## 1 a 233
+## 2 b 222
+## 3 c  99</code></pre>
 <pre class="r"><code>group &lt;- rep(seq_along(temp$values),temp$lengths)
 
 # seq_along generates a sort of indice changing each time 
@@ -420,28 +420,28 @@ temp$lengths</code></pre>
 <pre><code>## [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;a&quot; &quot;b&quot;</code></pre>
 <pre class="r"><code>df</code></pre>
 <pre><code>##    x  y
-## 1  a 54
-## 2  a 43
-## 3  a 57
-## 4  b 97
-## 5  b 84
-## 6  c 71
-## 7  a 68
-## 8  a 46
-## 9  b 26
-## 10 b 65
-## 11 b 83</code></pre>
+## 1  a 24
+## 2  a 70
+## 3  a 40
+## 4  b 68
+## 5  b 93
+## 6  c 99
+## 7  a 17
+## 8  a 82
+## 9  b 16
+## 10 b 29
+## 11 b 16</code></pre>
 <pre class="r"><code>group</code></pre>
 <pre><code>##  [1] 1 1 1 2 2 3 4 4 5 5 5</code></pre>
 <pre class="r"><code>df &lt;- cbind(df,group)
 
 aggregate(y~group,df, sum)</code></pre>
 <pre><code>##   group   y
-## 1     1 154
-## 2     2 181
-## 3     3  71
-## 4     4 114
-## 5     5 174</code></pre>
+## 1     1 134
+## 2     2 161
+## 3     3  99
+## 4     4  99
+## 5     5  61</code></pre>
 </div>
 <div id="non-standard-evaluation" class="section level2">
 <h2>Non standard evaluation</h2>
@@ -457,7 +457,6 @@ aggregate(y~group,df, sum)</code></pre>
 <div id="what-is-the-tilda" class="section level2">
 <h2>What is the tilda?</h2>
 <pre class="r"><code>library(dplyr)</code></pre>
-<pre><code>## Warning: le package &#39;dplyr&#39; a été compilé avec la version R 4.2.3</code></pre>
 <pre><code>## 
 ## Attachement du package : &#39;dplyr&#39;</code></pre>
 <pre><code>## Les objets suivants sont masqués depuis &#39;package:stats&#39;:
