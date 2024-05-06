@@ -30,6 +30,14 @@ plot(pressure)
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
 
 
+```{r, warning=FALSE}
+library(dplyr)
+
+
+```
+
+
+
 ## RLe and agregate
 
 ```{r}
@@ -69,7 +77,31 @@ aggregate(y~group,df, sum)
 ```{r}
 
 head(mtcars)
+mtcars |> filter(mpg > mean(mpg))
 
+
+select_rows <- function(data){
+    data |> filter(mpg > mean(mpg))    
+}
+
+select_rows(mtcars)
+
+# unquoted version
+select_rows_unquoted <- function(data,my_colname){
+    
+    data |> filter({{my_colname}} > mean({{my_colname}}))
+}
+
+select_rows_unquoted(mtcars,mpg)
+
+# quoted version
+
+select_rows_quoted <- function(data, my_colname){
+    my_colname <- sym(my_colname)
+    data |> filter(!!my_colname > mean(!!my_colname))
+}
+
+select_rows_quoted(mtcars,"mpg")
 
 
 
@@ -81,7 +113,7 @@ head(mtcars)
 
 ```{r, warning=FALSE}
 
-library(dplyr)
+
 mtcars |> head()
 mtcars |> mutate_at(vars(mpg,cyl), ~. *2) |> head()
 
