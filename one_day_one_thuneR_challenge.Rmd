@@ -173,3 +173,12 @@ mtcars |> summarize(across(1:4, list(sum=sum, mean=mean), .names = '{fn}_{col}')
 ```
 
 
+# List all the objects in the current environment
+
+```{r}
+objs <- mget(ls("package:base"), inherits = TRUE)
+funs <- Filter(is.function, objs)
+str(funs)
+
+```
+
