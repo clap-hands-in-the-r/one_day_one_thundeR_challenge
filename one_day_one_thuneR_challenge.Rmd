@@ -173,12 +173,136 @@ mtcars |> summarize(across(1:4, list(sum=sum, mean=mean), .names = '{fn}_{col}')
 ```
 
 
-# List all the objects in the current environment
+
+# Lexical scoping
 
 ```{r}
-objs <- mget(ls("package:base"), inherits = TRUE)
-funs <- Filter(is.function, objs)
-str(funs)
+# List all the objects in the current environment
+
+x <- 10
+f <- function(x){
+    function(){
+        y <- 5
+        x+y
+    }
+}
+
+f(5)()
+
+rm(x,f)
+
+#########
+
+f <- function(){
+    x <- 1
+    y <- 2
+    c(x,y)
+}
+f()
+
+#########
+
+x <- 4
+f <- function(){
+    x <- 1
+    y <- 2
+    c(x,y)
+}
+f()
+ls()
+rm(f,x)
+#########
+
+x <- 4
+h <- function(x){
+    y <- 5
+    i <- function(){
+        z <- 7
+        c(x,y,z)
+    }
+    i()
+    
+}
+h(2)
+rm(h,x)
+##########
+
+x <- 4
+f <- function(x){
+    x <- 1
+    y <- 2
+    c(x,y)
+}
+f(3)
+rm(f,x)
+##########
+
+x <- 4
+f <- function(x){
+    y <- 2
+    c(x,y)
+}
+f(3)
+rm(f,x)
+ls()
+
+##########
+
+j <- function(x){
+    y <- 10
+    function(){
+        c(x,y)
+    }
+}
+k <- j(1)
+k()
+ls()
+
+
+##########
+rm(j,k,l)
+l <- function(x) x+1
+m <- function(){
+    l <- function(x) x+2
+    l(10)
+}
+m()
+#########
+
+
+n <- function(x) x/2
+o <- function(){
+    n <- 10
+    n(n)
+}
+o()
+
+#########
+
+j <- function(){
+    if (!exists("a")) {
+        a <- 1
+    } else {
+        a <- a +1
+    }
+    a
+}
+j()
+j()
+j()
+
+
+########
+
+j <- function() x
+
+x <- 10
+j()
+x <- 11
+j()
+x <- 70
+j()
+
 
 ```
 
