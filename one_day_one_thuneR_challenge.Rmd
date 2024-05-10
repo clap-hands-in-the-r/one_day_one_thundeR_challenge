@@ -303,6 +303,40 @@ j()
 x <- 70
 j()
 
+codetools::findGlobals(j)
+
+g <- function() x+1
+codetools::findGlobals(g)
+emptyenv()
+g <- emptyenv()
+g()
+
+########
+# A damned tweak by Hadley !
+
+`(` <- function(e1){
+    if (is.numeric(e1) & runif(1) > 0.1 ){
+        e1 <- e1 +1
+    } else {
+        e1
+    }
+}
+replicate(1000,(1+2))
+table(replicate(1000,(1+2))==4)/1000
+ls()
+rm(`(`)
+
+
+########
+
+args <- list(1:10, na.rm = TRUE)
+do.call(mean,args)
+
+########
+objs <- mget(ls("package:base"), inherits = TRUE)
+funs <- Filter(is.function, objs)
+funs
+
 
 ```
 
