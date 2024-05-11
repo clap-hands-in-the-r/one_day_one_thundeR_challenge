@@ -338,5 +338,22 @@ funs <- Filter(is.function, objs)
 funs
 
 
+
+
+```
+
+# Function call, arguments, partial matching
+
+```{r}
+
+f <- function(abcdef, bcde1, bcgg2){
+    list(a = abcdef, b1 = bcde1, b2 = bcgg2)
+}
+
+str(f(1,2,3))
+str(f(2,3,abcdef = 5))
+str(f(2,3,a=7))
+str(f(bcg = 10, bcd = 6, abc = 8))
+
 ```
 
