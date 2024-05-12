@@ -357,3 +357,64 @@ str(f(bcg = 10, bcd = 6, abc = 8))
 
 ```
 
+# Arguments missing, arguments checking
+
+```{r}
+
+f <- function(x,y){
+    c(missing(x),missing(y))
+    
+}
+f()
+f(1)
+f(1,2)
+
+# 
+g <- function(a = 1, b = d){
+    d <- a^2 +1  
+    d
+}
+
+g()
+g(10)
+g(11)
+
+```
+
+
+
+# Infix operator
+
+```{r}
+`%+%` <- function(a,b) paste0(a,b)
+"This " %+% "is " %+% "a " %+% "long " %+% "string"
+`+`(5,7)
+`*`(5,7)
+sapply(c(5,7,7), `+`, 3)
+
+
+```
+
+# Environments
+
+```{r}
+
+search()
+library(tidyverse)
+search()
+e1 <- new.env()
+search()
+e1$a <- 1
+search()
+ls()
+typeof(e1)
+exists("x", envir = e1)
+exists("a", envir = e1)
+globalenv()
+environment()
+parent.env(e1)
+baseenv()
+
+
+```
+
