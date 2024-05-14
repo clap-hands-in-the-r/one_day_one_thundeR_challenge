@@ -567,3 +567,27 @@ subset2(sample_df2, x > 8)
 
 ```
 
+# Environments and lists
+
+```{r}
+
+modify <- function(x){
+    x$a <- 2
+    invisible()
+}
+
+l_x <- list(a=1)
+modify(l_x)
+l_x
+# modify doesn't modifiy a list, it creates a copy...
+
+e_x <- new.env()
+e_x$a <- 1
+e_x$a
+modify(e_x)
+e_x$a
+# modify modifies the environment because environments are modified in place
+
+
+```
+
