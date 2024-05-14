@@ -591,3 +591,22 @@ e_x$a
 
 ```
 
+# Environments, one possible side effect
+
+```{r}
+
+y <- 1
+e1 <- new.env()
+get("y", e1)
+# returns 1 despite one is not in our environment
+
+# to avoid this side effect, we need to specify the empty environment
+# as our parent environment
+e2 <- new.env(parent = emptyenv())
+get("y", e2)
+# returns an error and this is the behavior expected because
+# we didn't have an object y in e2
+
+```
+
+
