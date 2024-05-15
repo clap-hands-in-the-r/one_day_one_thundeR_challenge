@@ -609,4 +609,100 @@ get("y", e2)
 
 ```
 
+# Functional programming with hadley
+
+```{r}
+
+df <- data.frame(replicate(6,sample(c(1:10,-99),6, replace = TRUE)))
+
+names(df) <- letters[1:6]
+df
+df$a[df$a == -99] <- NA
+df$b[df$b == -99] <- NA
+df$c[df$c == -99] <- NA
+df$d[df$d == -99] <- NA
+df$e[df$e == -99] <- NA
+df$f[df$f == -99] <- NA
+
+df
+
+df <- data.frame(replicate(6,sample(c(1:10,-99),6, replace = TRUE)))
+names(df) <- letters[1:6]
+fix_missing <- function(x){
+    x[x == -99] <- NA
+    x
+}
+
+df
+df$a <- fix_missing(df$a)
+df$b <- fix_missing(df$b)
+
+df <- data.frame(replicate(6,sample(c(1:10,-99),6, replace = TRUE)))
+names(df) <- letters[1:6]
+
+df2 <- lapply(df, fix_missing)
+df2
+# df2 is a list
+as.data.frame(df2)
+
+# a little trick assign to object df2[] will constraint the list to 
+# the structure of a data frame
+
+df3 <- data.frame(matrix("", nrow=6, ncol=6))
+df3
+
+# lapply is called a functionnal because it takes a function as argument
+df3[] <- lapply(df,fix_missing)
+df3
+
+# rewritting lapply
+
+my_apply <- function(x){
+    out <- vector("list",length(x))
+    for (i in seq_along(x)) {
+        out[[i]] <- fix_missing(x[[i]])
+    }
+    out
+}
+df[] <- my_apply(df)
+df
+
+
+my_vec <- sample(c(1:100, NA), 50, replace = TRUE)
+my_df <- data.frame(replicate(10,sample(c(1:100, NA), 50, replace = TRUE)))
+summary_1 <- function(x) {
+    c(sum(x), mean(x), median(x), sd(x), IQR(x))
+}
+
+lapply(my_vec,summary_1)
+summary_1(my_vec)
+
+summary_2 <- function(x){
+    funs <- c(sum,mean,median,sd, IQR)
+    y <- x
+    lapply(funs, function(f) f(x, na.rm = TRUE))
+}
+
+summary_2(my_vec)
+
+
+my_vec <- sample(c(1:100,rep(NA,10)), 50, replace = TRUE)
+my_df <- data.frame(replicate(10,sample(c(1:100, NA), 50, replace = TRUE)))
+summary_1 <- function(x) {
+    c(sum(x), mean(x), median(x), sd(x), IQR(x))
+}
+
+lapply(my_vec,summary_1)
+summary_1(my_vec)
+
+summary_2 <- function(x){
+    funs <- c(sum,mean,median,sd, IQR)
+    y <- x
+    lapply(funs, function(f) f(x, na.rm = TRUE))
+}
+
+summary_2(my_vec)
+
+
+```
 
