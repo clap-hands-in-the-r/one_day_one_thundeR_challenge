@@ -706,3 +706,23 @@ summary_2(my_vec)
 
 ```
 
+# Anonymous fonction ie fonction without a name
+
+```{r}
+unlist(lapply(mtcars, function(x) length(unique(x))))
+unlist(lapply(mtcars, function(x) sum(x)))
+
+function(x)3()
+# not a function
+(function(x) 3)()
+# this one is a fontion it works
+
+(function(x) x + 3)(10)
+# it works
+
+f <- function(x) x + 3
+f(10)
+# it is the same
+
+```
+
