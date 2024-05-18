@@ -726,3 +726,40 @@ f(10)
 
 ```
 
+# trying to understand deeper the tilda ~ leading to call and language
+
+```{r}
+my_obj <- a ~ b
+str(my_obj)
+# my_obj is of class formula with a typeof "language" and a mode "call"
+typeof(my_obj)
+mode(my_obj)
+help(`~`)
+# `~ is from base R. help is not of real help 
+is.call(my_obj)
+# returns true
+cl <- call("round",10.5)
+typeof(cl) #language
+eval(cl) # returns 10
+a <- 10.5
+call("round",a) # returns round(10.5)
+eval(call("round",a)) # returns 10
+call("round", quote(a)) # returns round(a)
+eval(call("round", quote(a))) # retunrs 10
+
+
+```
+
+# Exercice with Hadley
+
+```{r}
+# Use lapply() and an anonymous function to find the coefficient of variation (the standard deviation divided by the mean) for all columns in the mtcars dataset
+
+unlist(lapply(mtcars, function(x) sd(x)/mean(x)))
+
+?do.call
+do.call(mean,list(1:10))
+
+
+```
+
