@@ -762,4 +762,37 @@ do.call(mean,list(1:10))
 
 
 ```
+# List of functions
+
+```{r}
+
+compute_mean <- list(
+    # be careful i don't know why now, but if 
+    # we built functions with assignment and not with equal sign
+    # it doesn't work
+    baase = function(x) mean(x),
+    suum = function(x) sum(x)/length(x),
+    manuual = function(x){
+        total <- 0
+        n <- length(x)
+        for (i in seq_along(x)) {
+            total <- total + x[i]/n
+        }
+        total
+    }
+)
+
+x <- runif(1e7)
+
+# we need to subset with double brackets here
+system.time(compute_mean$baase(x))
+system.time(compute_mean[[2]](x))
+system.time(compute_mean[["manuual"]](x))
+
+lapply(compute_mean, function(f) f(x))
+
+lapply(compute_mean, function(f) system.time(f(x)))
+
+
+```
 
