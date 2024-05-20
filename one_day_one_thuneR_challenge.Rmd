@@ -795,4 +795,65 @@ lapply(compute_mean, function(f) system.time(f(x)))
 
 
 ```
+# Environments with Garett Gromlund
+
+```{r}
+
+show_env <- function() {
+    list(
+        ran.in = environment(),
+        parent = parent.env(environment()),
+        objects = ls.str(envir = environment())
+    )
+}
+
+show_env()
+# every function has an environment
+environment(show_env)
+environment(mean)
+
+# Function composition
+
+```
+
+
+
+```{r}
+
+power <- function(exp){
+    print(environment())
+    function(x){
+        x^exp
+    }
+}
+
+square <- power(2)
+cube <- power(3)
+
+square(3)
+cube(2)
+
+library(pryr)
+parenvs(square)
+environment(square)
+parent.env(square)
+square
+environment(parenvs)
+
+```
+
+# Split function to split a vector in groups
+
+```{r}
+my_vec <- c(1:5, c(NA,1), rep(3,2))
+my_groups <- c(rep("group A",5), rep("group B", 2), rep("group C", 2))
+
+my_vec_by_groups <- split(my_vec, my_groups)
+my_vec_by_groups
+
+# reverse operation
+unsplit(my_vec_by_groups,my_groups)
+
+
+```
 
