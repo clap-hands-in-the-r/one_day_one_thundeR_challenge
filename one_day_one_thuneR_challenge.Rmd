@@ -857,3 +857,26 @@ unsplit(my_vec_by_groups,my_groups)
 
 ```
 
+# Sink to print text or output in a file
+
+```{r}
+# Sink acts like a recorder. You open it with sink(file = "XXX.txt")
+# you close it with sink()
+# all actions you make in between are recorder to the output
+# it best works with cat() to print something (cleaner)
+# but also works with print() -- less clean
+
+sink(file = "my_first_sink_file.txt")
+cat("This is my first sink file")
+sink()
+file.show("my_first_sink_file.txt")
+file.remove("my_first_sink_file.txt")
+sink(file = "my_second_sink_file_is_a_df.txt")
+cat("This is my second sink file with df mtcars")
+mtcars
+sink()
+file.show("my_second_sink_file_is_a_df.txt")
+file.remove("my_second_sink_file_is_a_df.txt")
+
+```
+
