@@ -896,4 +896,30 @@ c("caret", "tidyquant") %in% my_inst_packages # returns TRUE FALSE
 
 ```
 
+# Using cut and split
+
+```{r}
+my_vec <- 1:16
+chunk_size <- 4
+seq_along(my_vec) # returns the same content as my_vec
+ceiling(6.8) # returns 7
+floor(6.8) # returns 6
+ceiling(seq_along(my_vec)/chunk_size) # returns a vector 
+# [1] 1 1 1 1 2 2 2 2 3 3 3 3 4 4 4 4
+chunks <- split(my_vec, ceiling(seq_along(my_vec)/chunk_size))
+chunks_list <- list(chunks = chunks)
+
+my_vect <- 1:10
+chunk_size <- 3
+breakpts <- seq(0,length(my_vect)+2, by = chunk_size)
+breakpts
+chunks <- cut(seq_along(my_vect),breaks = breakpts, labels = FALSE)
+chunks
+chunks <- split(my_vect,chunks)
+chunks
+
+```
+
+
+
 
