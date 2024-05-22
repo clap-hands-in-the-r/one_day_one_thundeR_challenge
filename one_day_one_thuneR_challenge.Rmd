@@ -880,3 +880,20 @@ file.remove("my_second_sink_file_is_a_df.txt")
 
 ```
 
+# Check installed packages
+
+```{r}
+my_inst_packages <- installed.packages()
+my_inst_packages |> str()
+attributes(my_inst_packages)
+# I don't really understand the structure of the object created but it works
+"dplyr" %in% my_inst_packages # returns TRUE
+"sf" %in% my_inst_packages
+"leaflet" %in% my_inst_packages
+"caret" %in% my_inst_packages
+"tidyquant" %in% my_inst_packages # returns FALSE
+c("caret", "tidyquant") %in% my_inst_packages # returns TRUE FALSE
+
+```
+
+
