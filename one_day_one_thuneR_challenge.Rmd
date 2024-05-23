@@ -920,6 +920,16 @@ chunks
 
 ```
 
+# Interest of seq_along
 
+```{r}
+a <- 1:10
+seq_along(a) # returns the same as calling a
+b <- letters[1:10]
+seq_along(b) # b is a vector of letters and seq_along 
+# is more interesting in this case
+
+
+```
 
 
