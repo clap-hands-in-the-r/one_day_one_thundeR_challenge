@@ -932,4 +932,73 @@ seq_along(b) # b is a vector of letters and seq_along
 
 ```
 
+# Add one and lexical scoping again with Hadley
+
+
+
+```{r}
+
+add_one_v1 <- function(){
+    i <- 0
+    function(){
+        i <- i+1
+    }
+    i
+}
+
+add_one_v1() #returns 0
+
+i <- 0
+add_one_v2 <- function(){
+    function(){
+        i <- i+1
+    }
+    i
+}
+add_one_v2() # returns 0
+add_one_v2() # returns 0 again
+
+i <- 0
+add_one_v3 <- function(){
+    function(){
+        i <<- i + 1
+    }
+    i
+
+}
+add_one_v3()
+add_one_v3()() # doesn't work "attempt to apply non function
+
+# notice the tiny difference that makes a big one in results
+# when a function is nested inside a function 
+# we need two calls to the more external function
+# or create a function with the coupled function
+# both ways are equivalents
+i <- 0
+add_one_v3_bis <- function(){
+    
+    function(){
+        i <<- i + 1
+        i
+    }
+    
+}
+add_one_v3_bis()() # returns 1 and increment at each call
+plus_one <- add_one_v3_bis()
+plus_one() # increment increment etc. equivalent to double call with 
+# double parenthesis
+
+i <- 0
+add_one_v4 <- function(){
+    i <<- i +1
+    i
+}
+add_one_v4() # returns 1
+add_one_v4() # returns 2
+add_one_v4() # returns 3
+
+
+
+
+```
 
