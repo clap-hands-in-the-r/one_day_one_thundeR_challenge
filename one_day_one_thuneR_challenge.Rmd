@@ -997,8 +997,24 @@ add_one_v4() # returns 1
 add_one_v4() # returns 2
 add_one_v4() # returns 3
 
+```
 
+# Order, rank, sort
 
+```{r}
+vec <- sample(letters, size = 8, replace = FALSE)
+vec # [1] "h" "l" "d" "c" "s" "t" "e" "q"
+order(vec) # [1] 4 3 7 1 2 8 5 6
+# order sends back the place/indices of the elements in order to rank it in increasing order
+# eg we would need the 4th element of vec that is "c" to arrive first,
+# then we would need the third element of vec that is "d" to arrive in second position
+# and so on
+vec[order(vec)] # [1] "c" "d" "e" "h" "l" "q" "s" "t"
+# given what we said, this commend orders the vec alphabeticaly
+rank(vec) #[1] 4 5 2 1 7 8 3 6
+vec[rank(vec)] # noting useful [1] "c" "s" "l" "h" "e" "q" "d" "t"
+
+sort(vec) # [1] "c" "d" "e" "h" "l" "q" "s" "t"
 
 ```
 
