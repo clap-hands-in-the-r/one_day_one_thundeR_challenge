@@ -1018,3 +1018,32 @@ sort(vec) # [1] "c" "d" "e" "h" "l" "q" "s" "t"
 
 ```
 
+# Intro to function with hadley advanced first edition
+
+
+```{r}
+
+# Try to guess the answers
+x <- 10
+f1 <- function(x){
+    function(){
+        x + 10
+    }
+}
+f1(1)() # [1] 11
+f1()(1) # Error in f1()(1) : unused argument (1)
+
+f_sup <- f1()
+f_sup(1) # Error in f_sup(1) : unused argument (1)
+
+f_sup2 <- f1(1)
+f_sup2() # [1] 11
+
+f2 <- function(a, b){
+    a * 10
+}
+
+f2(3, stop("This is an error!"))
+
+```
+
