@@ -1047,3 +1047,27 @@ f2(3, stop("This is an error!"))
 
 ```
 
+# Function operators
+
+```{r}
+# a function operator is a fuction that takes one (or more)
+# functions as input and returns a function as output
+# vapply is a functional
+
+chatty <- function(f){
+    function(x, ...){
+        res <- f(x, ...)
+        cat("Processing", x, "\n", sep="")
+        res
+    }
+    
+}
+
+f <- function(x) x^2
+s <- c(3,2,1)
+chatty(f)(1)
+vapply(s,chatty(f), numeric(1))
+
+```
+
+
