@@ -1070,4 +1070,22 @@ vapply(s,chatty(f), numeric(1))
 
 ```
 
+# sub and gsub
+
+```{r}
+?gsub
+is.primitive(gsub) # FALSE
+# sub("old_pattern","new_pattern", my_string)
+x <- "aeiouyaeiouyaeiouy"
+sub("aeiou","bfjpv",x) # [1] "bfjpvyaeiouyaeiouy"
+# sub > replace only first match
+gsub("aeiou","bfjpv",x) # [1] "bfjpvybfjpvybfjpvy"
+# gsub replace all matches
+
+sub("e","ERNEST",x) # [1] "aERNESTiouyaeiouyaeiouy"
+gsub("e","ERNEST",x) # [1] "aERNESTiouyaERNESTiouyaERNESTiouy"
+
+sub
+
+```
 
