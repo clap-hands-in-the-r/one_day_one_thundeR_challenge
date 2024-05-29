@@ -390,8 +390,8 @@ g(11)
 "This " %+% "is " %+% "a " %+% "long " %+% "string"
 `+`(5,7)
 `*`(5,7)
-sapply(c(5,7,7), `+`, 3)
-
+sapply(c(5,7,7), `+`, 3) # [1]  8 10 10
+sapply(c(5,7,7), `%+%`, 3) # [1] "53" "73" "73"
 
 ```
 
@@ -1119,6 +1119,38 @@ f() # Error in h() : This is an error!
 h <- function() stop("This is an error!", call. = FALSE)
 f() # Error: This is an error!
 
+
+```
+
+# Switch statement
+
+```{r}
+x <- c(1,2,5,4,3,1)
+
+switch(3,"First order","Second order","Third order", "Fourth order")
+switch(4,"Do this","Do that","Do this and that", "Do this or that")
+
+for (i in x)  {
+    cat(i,
+    switch(i,"Do this","Do that","Do this and that", "Do this or that"),
+    "\n", sep = " "
+    )
+}
+
+
+for (i in x)  {
+    
+    print(c(i,
+    switch(i,"Do this","Do that","Do this and that", "Do this or that")
+    ))
+}
+
+for (i in x)  {
+    print(i)
+    print(
+    switch(i,"Do this","Do that","Do this and that", "Do this or that")
+    )
+}
 
 ```
 
