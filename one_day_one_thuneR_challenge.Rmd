@@ -1089,3 +1089,17 @@ sub
 
 ```
 
+# Managing paths with R
+
+```{r}
+system.file(package = "dslabs")
+dir <- system.file(package = "dslabs")
+list.files(dir)
+# file.path is useful to build a complete path
+my_path <- file.path(dir, "extdata")
+list.files(my_path)
+my_new_path <- file.path(my_path,"olive.csv")
+readLines(my_new_path, n = 10)
+
+```
+
