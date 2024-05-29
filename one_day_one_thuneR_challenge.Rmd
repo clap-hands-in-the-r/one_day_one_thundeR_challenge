@@ -1103,3 +1103,22 @@ readLines(my_new_path, n = 10)
 
 ```
 
+# Conditions
+
+```{r}
+stop("This is an error!")
+message("This is just a message to user!")
+warning("This is a warning ! Just between a stop/ error and a simple message")
+
+f <- function() g()
+g <- function() h()
+h <- function() stop("This is an error!")
+f() # Error in h() : This is an error!
+
+# To avoid the call in the message (note useful according to hadley)
+h <- function() stop("This is an error!", call. = FALSE)
+f() # Error: This is an error!
+
+
+```
+
