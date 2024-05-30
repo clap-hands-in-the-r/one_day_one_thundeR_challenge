@@ -1154,3 +1154,17 @@ for (i in x)  {
 
 ```
 
+# Draw a triangle
+
+```{r}
+
+x <- c(0,1,0)
+y <- c(0,0,1)
+
+plot(x,y)
+polygon(x,y)
+polygon(x,y, border = "green")
+polygon(x,y, col = "green")
+
+```
+
