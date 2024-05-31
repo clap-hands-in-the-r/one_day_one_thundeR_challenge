@@ -1168,3 +1168,136 @@ polygon(x,y, col = "green")
 
 ```
 
+# Play with function from H
+
+```{r}
+
+`*` (2, `+` (4,5)) # returns 18
+2* (4+5) # previous is equivalent to left
+
+x <- 10
+f1 <- function(x){
+    function(){
+        x + 10
+    }
+}
+f1(1)() # returns 11
+
+# arguments who is who? when nested functions
+f2 <- function(x){
+    function(y){
+        cat("I'm called from nested and I am ",y,"\n")
+        cat("I'm called from outer and I am ",x,"\n")
+    }
+    
+}
+
+f2(1)(2)
+# f2(1)(2) the far right parenthis include argument for the nested function
+# (1) the closer left from f2 include the argument for outer function
+
+# note this doesnt' work
+f2 <- function(x){
+    function(y){
+        cat("I'm called from nested and I am ",y,"\n")
+       
+    }
+     cat("I'm called from outer and I am ",x,"\n")
+    
+}
+f2(1)(2)
+# returns 
+#I'm called from outer and I am  1 
+# Error: attempt to apply non-function
+
+f3 <- function(a,b){
+    a + 10
+}
+f3(5,stop("This is an error!")) # returns [1] 15
+# it works because lazy evaluation 
+# b argument is not evaluated
+
+f3(stop("This is an error!", call. = FALSE),5)
+# returns Error in f3(stop("This is an error!", 5)) : This is an error!5
+
+# add3 to each element of two vectors
+add <- function(x,y){
+    x + y    
+}
+lapply(list(1:3, 4:6), add, 3)
+# Infix allow a simplest form (no need for a function)
+lapply(list(1:3,4:6), `+`, 3)
+
+# tricking a primitive function/operator
+is.primitive(`(`) # returns TRUE
+
+`(` <- function(e1) {
+    if (is.numeric(e1) && runif(1) <0.10){
+        e1 <- e1 + 1 
+    } else {
+        e1
+    }
+}
+replicate(50,(1+2))
+
+
+
+```
+
+# Draw a rectangle
+
+```{r}
+
+x <- c(0,2,2,0)
+y <- c(0,0,1,1)
+plot(x,y)
+polygon(x,y,col = "green")
+polygon(x,y,border = "green")
+
+
+```
+
+
+# Write a function identify first to 80%
+
+```{r}
+df <- data.frame(let = rep(letters,5), num =sample(1:100,size=130, replace= TRUE ))
+
+fix_missing <- function(x){
+    x[x == -99] <- NA
+    x
+}
+
+purrr::detect_index(df$num, function(x) x >80)
+
+find_first_above_80 <- function(x){
+    y <- x
+    z <- purrr::detect_index(x, function(x) x >80)
+    y[c(1:z-1)] <- "below_80"
+    y[z] <- "first_to_80"
+    y[c((z+1):length(x))] <- "above_80"
+    y <<-  y
+}
+find_first_above_80(df$num)
+
+df <- cbind(df,y)
+df
+
+library(purrr)
+detect
+detect(df$let, function(x) x=="d")
+detect_index(df$let, function(x) x=="d")
+is_even <- function(x) x%%2 ==0
+detect(df$num,is_even)
+detect_index(df$num, is_even) # returns 1
+sort(df$num,decreasing = TRUE)
+detect_index(sort(df$num,decreasing = TRUE), is_even) # returns 2
+
+fix_missing <- function(x){
+    x[x == -99] <- NA
+    x
+}
+
+
+```
+
