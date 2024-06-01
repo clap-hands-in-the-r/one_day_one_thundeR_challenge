@@ -1301,3 +1301,28 @@ fix_missing <- function(x){
 
 ```
 
+# Differenciate base objects and real object oriented objects
+
+```{r}
+
+library(sloop)
+
+is.object(1:10) # [1] FALSE
+otype(1:10) # [1] "base"
+
+is.object(mtcars) # [1] TRUE
+otype(mtcars) # [1] "S3"
+
+#  OO objects have an attribute class
+
+class(mtcars) 
+sloop::s3_class(mtcars)
+
+x <- matrix(1:20, nrow = 5)
+x
+class(x) # returns [1] "matrix" "array" 
+s3_class(x) # returns [1] "matrix"  "integer" "numeric"
+
+
+```
+
