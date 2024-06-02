@@ -1326,3 +1326,119 @@ s3_class(x) # returns [1] "matrix"  "integer" "numeric"
 
 ```
 
+# Different forms of subsetting
+
+```{r}
+my_list <- list(
+    my_characters = letters[1:25],
+    my_numbers = 1:18,
+    my_inner_list = list(
+        my_bool <- sample(c(TRUE,FALSE), 100, replace = TRUE),
+        my_integer <- 1L
+    )
+)
+
+# subsetting a list with simple bracket send back an object of type list
+my_first_element_wth_simple_bracket <- my_list[1]
+typeof(my_first_element_wth_simple_bracket) # "list"
+
+# subsetting with double brackets send back an object of type vector
+my_first_element_wth_dbl_brackets <- my_list[[1]]
+typeof(my_first_element_wth_dbl_brackets) # [1] "character"
+my_first_element_wth_dbl_brackets
+
+
+```
+
+# Trying to modify an object through a function
+
+```{r}
+df <- data.frame(matrix(rep(runif(200),3), ncol =3))
+
+floor_zero_under <- function(x) {
+    x[x<0.1] <<- "hello!"
+    
+}
+
+my_vec <- sample(c(1:10,-99),1000, replace = TRUE)
+my_vec
+
+fix_missing <- function(x){
+    x[x == -99] <- NA
+    x <<- x
+}
+fix_missing(my_vec)
+
+
+
+floor_zero_under(df$X3) # Error in x[x < 0.1] <<- "hello!" : object 'x' not found
+
+temp <- df$X3
+floor_zero_under(temp)
+
+df |> dplyr::mutate(across(function(x) x < 0.1),0)
+
+
+```
+
+# Bindings with lobstr::obj_addrs
+
+```{r}
+library(lobstr)
+
+a <- 1:10
+b <- a
+c <- b
+d <- 1:10
+obj_addrs(list(a,b,c,d))
+# [1] "0x26f9bfc8da8" "0x26f9bfc8da8" "0x26f9bfc8da8" "0x26f97787628"
+# a b and c have the same address
+
+```
+
+# Vectorize your code
+
+
+```{r}
+# your code will be faster if you :
+# 0/ use logical tests
+# 1/ use subsetting
+# 2/ use logical subsetting
+# 3/ treat element wise
+
+treat_in_loop <- function(vec){
+    for (i in 1:length(vec)){
+        if (vec[i] < 0 ) {
+            vec[i] <- vec[i] * -1}
+    }
+    vec
+}
+
+treat_vectorized <- function(vec){
+    negs <- vec <0
+    vec[negs] <- vec[negs]*-1
+    vec
+    
+}
+
+# create a long vector
+long <- rep(c(-1,1),5e6)
+system.time(treat_in_loop(long))
+system.time(treat_vectorized(long))
+
+library(microbenchmark)
+microbenchmark(
+    treat_in_loop(long),
+    treat_vectorized(long)
+)
+
+# 
+# Unit: milliseconds
+#                    expr      min       lq     mean   median       uq      max neval
+#     treat_in_loop(long) 585.0251 621.1456 643.0628 639.5977 661.8067 775.3759   100
+#  treat_vectorized(long) 122.0885 125.5696 145.9642 136.2014 164.4333 244.7172   100
+
+    
+```
+
+
