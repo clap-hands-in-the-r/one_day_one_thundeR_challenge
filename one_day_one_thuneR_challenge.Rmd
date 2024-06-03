@@ -1353,12 +1353,24 @@ my_first_element_wth_dbl_brackets
 # Trying to modify an object through a function
 
 ```{r}
-df <- data.frame(matrix(rep(runif(200),3), ncol =3))
+my_df <- data.frame(matrix(rep(runif(200),3), ncol =3))
 
-floor_zero_under <- function(x) {
-    x[x<0.1] <<- "hello!"
-    
+floor_zero_under <- function(the_vec) {
+    the_vec[the_vec <0.1 ] <- "Hello"
+    assign("new_vec",the_vec, envir = globalenv())
 }
+
+floor_zero_under_two <- function(the_vec) {
+    the_vec[the_vec <0.1 ] <- 0
+    assign("sec_new_vec",the_vec, envir = globalenv())
+}
+
+my_vec <- as.vector(my_df[,3])
+my_vec
+new_vec
+
+floor_zero_under_two(my_vec)
+sec_new_vec
 
 my_vec <- sample(c(1:10,-99),1000, replace = TRUE)
 my_vec
@@ -1439,6 +1451,22 @@ microbenchmark(
 #  treat_vectorized(long) 122.0885 125.5696 145.9642 136.2014 164.4333 244.7172   100
 
     
+```
+
+# Lookup table with Garett
+
+```{r}
+
+vec <- c("jack","jim","jack","jo","jim")
+tbl <- c("jack"=7,"jim"=2,"jo"=0)
+tbl[vec]
+
+# For the moment I don't understand how this works
+# but it does!
+
+# jack  jim jack   jo  jim 
+#    7    2    7    0    2 
+
 ```
 
 
