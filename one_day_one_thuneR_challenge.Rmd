@@ -1469,4 +1469,56 @@ tbl[vec]
 
 ```
 
+# Objects with Garett
+
+```{r}
+
+# There are 4 main types of atomic vectors in R and 2 less used types
+# Integers, doubles = numeric, logical, and character
+# the two complementaries types are complex and raw, they are far far less used
+
+com <- c(1 + 1i, 2 + 3i, 4 + 6i)
+typeof(com)
+
+rraw <- c(raw(1), raw(2), raw(5))
+rraw
+typeof(rraw)
+
+vec <- 1:10
+attributes(vec) # returns NULL
+names(vec) <- letters[1:10]
+attributes(vec)
+# there are three main types of attributes 
+# dim, name and class
+dim(vec) <- c(2,5)
+attributes(vec)
+# $dim
+# [1] 2 5
+typeof(vec) # [1] "integer"
+class(vec) # [1] "matrix" "array" 
+# when you attribute dimensions to a one d vector
+# it automatically gives it a class matrix and array
+# matrix and arrays are both special cases of atomic vectors
+# that's a reason why you can only have a unique type of elements
+# contained in a matrix or in an array
+
+
+```
+
+
+# By! Apply a Function to a Data Frame Split by Factors
+
+```{r}
+# by(data, INDICES, FUN, ..., simplify = TRUE)
+# INDICES	a factor or a list of factors, each of length nrow(data).
+by(iris[-5], iris$Species, sum) # returns a list
+by(iris[-5], 5, sum) # returns an error 
+
+by(iris[-5], iris$Species, summary)
+
+?by
+is.primitive(by) # FALSE
+
+
+```
 
