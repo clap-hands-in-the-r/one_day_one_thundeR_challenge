@@ -1535,3 +1535,63 @@ class(unclass(now)) # [1] "numeric"
 
 ```
 
+
+# Given a number, find the sum of all multiples of 3 or 5 below that number.
+
+```{r}
+
+# Input: 10
+# Output: 23 (Multiples of 3 and 5 below 10 are 3, 5, 6, 9. Sum = 3 + 5 + 6 + 9 = 23)
+
+
+some_of_multiples <- function(number){
+    sum <- 0
+    # below because strictly inf to number not inf or equal to num
+    number <- number -1
+    for (i in 1:number){
+        #cat("voici la valeur de i dans ce tour de boucle :", i, "\n")
+        if (i%%3 == 0 | i%%5 == 0) {
+            #cat(i, "is inside conditio\n")
+          sum <- sum + i
+            #cat("sum is equal to ", sum, "\n")
+        } 
+        
+    }
+    sum
+}
+
+print(some_of_multiples(10))
+
+some_of_multiples <- function(number){
+    sum <- 0
+    # below because strictly inf to number not inf or equal to num
+    number <- number -1
+    for (i in 1:number){
+        if (i%%3 == 0 | i%%5 == 0) {
+          sum <- sum + i
+        } 
+        
+    }
+    sum
+}
+
+# vectorised solution
+
+number <- 1:10
+number %% 5 ==0
+
+
+sum(number[number %% 5 ==0 | number %% 3 ==0])
+
+some_of_multiples_vecto <- function(number){
+    vec <- 1:(number-1)
+    sum(vec[vec %% 3 == 0 | vec %% 5 ==0 ])
+    
+}
+some_of_multiples_vecto(10)
+
+
+```
+
+
+
