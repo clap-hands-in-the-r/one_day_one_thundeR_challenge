@@ -1593,5 +1593,22 @@ some_of_multiples_vecto(10)
 
 ```
 
+# Check if year leap
 
+```{r}
+
+leap <- function(year){
+    # soit l'année est multiple de 4 et l'année n'est pas multiple de 100 > bisextile
+    # soit l'année est multiple de 100 condition renvoie false, mais l'année est multiple 400 donc TRUE
+    year %% 4 == 0 && (year %% 100 != 0 || year %% 400 == 0 ) 
+}
+
+leap(1900) # returns [1] FALSE
+leap(2000)
+leap(1996)
+leap(2004)
+leap(1986)
+leap(1984)
+
+```
 
