@@ -1635,3 +1635,20 @@ dart_res <- c('1' = 10)
 
 ```
 
+
+# Score function with Garett
+
+```{r}
+
+score <- function(){
+    die <- 1:6
+    dice <- sample(die,2,replace = TRUE)
+    sum(dice)
+    
+}
+
+score()
+score()
+
+```
+
