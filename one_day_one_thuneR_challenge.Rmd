@@ -1652,3 +1652,63 @@ score()
 
 ```
 
+# Fizz buzz
+
+```{r}
+# solution 1
+fizz_buzz <- function(n) {
+    my_string <- vector()
+    for (i in 1:n) {
+        if ( i %% 3 ==0 && i %% 5 == 0) {
+            choice <- "Fizz Buzz"
+        } else if ( i %% 3 ==0) {
+            choice <- "Fizz"
+        } else if ( i %% 5 == 0) {
+            choice <- "Buzz"
+        } else {
+            choice <- as.character(i)
+        }
+        my_string <- c(my_string,choice)
+    }
+    print(my_string)
+    
+}
+
+# solution 2
+fizz_buzz_helper <- function(i) {
+  s <- paste(c("Fizz", "Buzz")[i %% c(3, 5) == 0], collapse=" ")
+  ifelse(s == "", paste(i), s)
+}
+fizz_buzz <- function(input) {
+  sapply(1:input, fizz_buzz_helper)
+}
+
+
+
+```
+
+# Quick plot with garett
+
+```{r}
+
+library(ggplot2)
+x <- seq(from = -1, to = 1, by = 0.1)
+y <- x^3
+qplot(x,y)
+
+roll <- function(){
+    die <- 1:6
+    dice <- sample(die,2,replace = TRUE)
+    sum(dice)
+}
+
+x1 <- c(1,1,1,1,2,2,3,4,4,4,4)
+qplot(x1, binwidth = 1)
+
+x2 <- replicate(10000, roll())
+qplot(x2,binwidth = 1)
+
+
+```
+
+
