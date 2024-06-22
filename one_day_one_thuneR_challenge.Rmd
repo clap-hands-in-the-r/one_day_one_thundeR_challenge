@@ -1711,4 +1711,23 @@ qplot(x2,binwidth = 1)
 
 ```
 
+# Tricking the dice with Garett
+
+```{r}
+
+roll_trick <- function(){
+    die <- 1:6
+    dice <- sample(die,2, replace = TRUE,
+                   prob = c(1/8, 1/8, 1/8, 1/8, 1/8, 3/8))
+    sum(dice)    
+}
+
+x3 <- replicate(10000, roll_trick())
+library(ggplot2)
+qplot(x3,binwidth = 1)
+# qplot is deprecated --> replaced by quickplot
+quickplot(x3,binwidth = 1)
+
+
+```
 
