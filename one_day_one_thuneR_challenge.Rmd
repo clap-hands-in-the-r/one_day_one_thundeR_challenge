@@ -1731,3 +1731,23 @@ quickplot(x3,binwidth = 1)
 
 ```
 
+# Elementary types
+
+
+```{r}
+
+vec <- sample(1:144,1000, replace = TRUE)
+is.vector(vec)
+typeof(vec) # [1] "integer"
+mat <- matrix(vec, nrow = 100, ncol = 10)
+is.vector(mat) # [1] FALSE
+typeof(mat) # [1] "integer"
+class(vec) # 1] "integer"
+class(mat) # [1] "matrix" "array" 
+is.vector(unclass(mat)) # [1] FALSE
+dim(mat) <- NULL
+is.vector(mat) # [1] TRUE
+
+```
+
+
