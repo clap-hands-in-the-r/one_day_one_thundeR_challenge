@@ -1751,3 +1751,24 @@ is.vector(mat) # [1] TRUE
 ```
 
 
+
+```{r}
+
+?expand.grid
+# Create a data frame from all combinations of the supplied vectors or factors. See the description of the return value for precise details of the way this is done.
+
+suits <- c("hearts","diamonds","clubs","spades")
+ranks <- c("A",2:10,"Jack","Queen","King")
+ranks
+deck <- expand.grid(rank = ranks, suit =suits)
+
+shuffle <- function(cards){
+    random <- sample(1:52,52)
+    deck[random,]
+}
+
+shuffle(deck)
+# each time you run shuffle you display a new order of the deck
+
+```
+
