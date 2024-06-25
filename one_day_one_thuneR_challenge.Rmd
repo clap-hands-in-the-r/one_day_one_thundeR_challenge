@@ -1808,3 +1808,31 @@ all(c(letter1, letter2) %in% letters_suit) # [1] TRUE
 
 ```
 
+# Utility of drop when manipulating data structures
+
+```{r}
+suits <- c("hearts","diamonds","clubs","spades")
+ranks <- c("A",2:10,"Jack","Queen","King")
+deck <- expand.grid(rank = ranks, suit =suits)
+typeof(deck) # [1] "list"
+class(deck) # [1] "data.frame"
+
+class(deck[1:2, 1:2]) # [1] "data.frame"
+class(deck[1:2,1]) # [1] "factor"
+typeof(deck[1:2,1])
+deck[1:2,1]
+
+new_deck <- data.frame(face = c("king","queen","jack","ten","nine","eight"), suit = rep("spades",6))
+class(new_deck)
+typeof(new_deck)
+
+new_deck[1:2,1]
+is.vector(new_deck[1:2,1]) # [1] TRUE if you subset like this, the second dimension is dropped by default
+is.data.frame(new_deck[1:2,1]) # [1] FALSE
+
+# drop = FALSE permits to preserve the dimension
+is.vector(new_deck[1:2,1, drop = FALSE]) # [1] FALSE
+is.data.frame(new_deck[1:2,1, drop = FALSE]) # [1] TRUE
+
+```
+
