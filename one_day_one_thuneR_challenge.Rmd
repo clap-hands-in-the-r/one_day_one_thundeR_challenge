@@ -1836,3 +1836,53 @@ is.data.frame(new_deck[1:2,1, drop = FALSE]) # [1] TRUE
 
 ```
 
+# Environments
+
+```{r}
+library(pryr)
+methods("pryr")
+ls("package:pryr")
+# fonctionne pas bien car va me chercher toutes les fonctions dont les héritées
+# et si je mets inherits = FALSE, ça ne fonctionne pas!
+objs <- mget(ls("package:pryr"), inherits = TRUE)
+funs <- Filter(is.function, objs)
+funs
+search()
+
+mget(ls("package:pryr"))
+?mget
+
+# ci-dessous fonctionne mieux!
+objs <- mget(ls("package:pryr"), envir = as.environment("package:pryr"), inherits = FALSE)
+funs <- Filter(is.function, objs)
+names(funs)
+
+
+# list all environnments 
+
+parenvs(all = TRUE)
+search()
+
+# accessor to every environment
+as.environment("package:pryr")
+
+# accessors to particular environments
+globalenv() # the child of childs
+emptyenv() # the father of fathers
+baseenv() # the base package (son of the emptyenv)
+
+# look up to the parent of an environment
+parent.env(emptyenv()) # Error in parent.env(emptyenv()) : the empty environment has no parent
+
+parent.env(globalenv()) # <environment: package:pryr>
+
+# list all objectfs contained in an environment
+ls(globalenv())
+ls(envir = as.environment("package:stats"))
+
+# access to a particular object contained in a particular environment
+globalenv()$new_deck
+
+
+```
+
