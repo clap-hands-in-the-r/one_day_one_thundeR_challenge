@@ -1885,4 +1885,47 @@ globalenv()$new_deck
 
 
 ```
+# Understanding environments with Garett!
+
+```{r}
+
+show_env <- function(){
+    list(
+        ran.in = environment(),
+        parent = parent.env(environment()),
+        objects = ls.str(environment())
+    )
+}
+show_env()
+show_env()
+# each time a function is ran it creates its own temporary environment
+
+# the same function to understand how environments are imbricated 
+# but we added three objects inside the function
+show_env <- function(){
+    a <- 1
+    b <- "c"
+    c <- 3
+    list(
+        ran.in = environment(),
+        parent = parent.env(environment()),
+        objects = ls.str(environment())
+    )
+}
+show_env()
+
+as.environment("0x000001de6d8d18f0")
+as.environment(environment())
+
+# to know where a function comes from
+environment(biplot) #<environment: namespace:stats>
+as.environment("package:stats")$biplot
+
+search()
+objs <- mget(ls("package:stats"),as.environment("package:stats"), inherits = FALSE)
+funs <- Filter(is.function, objs)
+names(funs)
+
+```
+
 
