@@ -1929,3 +1929,136 @@ names(funs)
 ```
 
 
+# Closures with Garett
+
+```{r}
+
+suits <- c("hearts","diamonds","clubs","spades")
+ranks <- c("A",2:10,"Jack","Queen","King")
+
+deck <- expand.grid(rank = ranks, suit =suits)
+
+shuffle <- function(cards){
+    random <- sample(1:52,52)
+    deck[random,]
+}
+
+DECK <- deck
+
+
+deal <- function(){
+    deck[1,]
+}
+deal() 
+
+deal <- function(){
+    card <- deck[1,]
+    assign("deck",DECK,envir = globalenv())
+    card
+}
+deal() # sends back allways the same deal!
+
+setup <- function(deck){
+    DECK <- deck
+    
+    DEAL <- function(){
+        card <- deck[1,]
+        assign("deck",deck[-1,], envir = globalenv())
+        card
+    }
+    
+    SHUFFLE <- function(){
+        random <- sample(1:52, size = 52)
+        assign("deck",DECK[random,], envir = globalenv())
+    }
+    
+    list(deal = DEAL, shuffle = SHUFFLE)
+}
+
+cards <- setup(deck)
+deal <- cards$deal
+shuffle <- cards$shuffle
+
+deal
+shuffle
+
+deal()
+shuffle()
+deal()
+deal()
+deal()
+deal()
+
+
+setup <- function(deck){
+    DECK <- deck
+    
+    DEAL <- function(){
+        card <- deck[1,]
+        assign("deck",deck[-1,], envir = parent.env(environment()))
+        card
+    }
+    
+    SHUFFLE <- function(){
+        random <- sample(1:52, size = 52)
+        assign("deck",DECK[random,], envir = parent.env(environment()))
+    }
+    
+    list(deal = DEAL, shuffle = SHUFFLE)
+}
+
+cards <- setup(deck)
+deal <- cards$deal
+shuffle <- cards$shuffle
+
+shuffle()
+deal()
+rep(deal(),50)
+deal()
+deal()
+deal()
+deal()
+deal()
+
+
+
+```
+
+# My version : I want to empty the deck each time a card is drawn
+
+```{r}
+
+suits <- c("hearts","diamonds","clubs","spades")
+ranks <- c("A",2:10,"Jack","Queen","King")
+deck <- expand.grid(rank = ranks, suit =suits)
+
+
+setup <- function(deck){
+    deck <- deck
+    DEAL <- function(){
+        card <- deck[-1,]
+        assign("deck",deck[-1,],envir = parent.env(environment()))
+        card
+    }
+    SHUFFLE <- function(){
+        random <- sample(1:length(deck), size = length(deck))
+        assign("deck",deck[random,], envir = parent.env(environment()))
+    }
+    list(deal = DEAL, shuffle = SHUFFLE)
+}
+
+cards <- setup(deck)
+deal <- cards$deal
+shuffle <- cards$shuffle
+
+rm(deck)
+shuffle()
+deal()
+shuffle()
+deal()
+
+
+
+```
+
+
