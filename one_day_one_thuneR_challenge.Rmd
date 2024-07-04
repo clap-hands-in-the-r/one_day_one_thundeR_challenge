@@ -2207,3 +2207,49 @@ sum(rolls2$value * rolls2$prob2)
 
 ```
 
+# Debugging tools
+
+```{r}
+first <- function() second()
+second <- function() third()
+third <- function() fourth()
+fourth <- function() fifth()
+fifth <- function() bug()
+
+first() # Error in bug() : could not find function "bug"
+
+traceback()
+
+# recursive error
+fifth <- function() second()
+first() # Error: C stack usage  15929648 is too close to the limit
+
+traceback()
+
+
+```
+
+# PlingPlangPlong function from exercism
+
+```{r}
+raindrops <- function(number) {
+
+    my_temp_string1 <- ""
+    my_temp_string2 <- ""
+    my_temp_string3 <- ""
+    my_temp_string4 <- ""
+    
+    if (number %%3 ==0) my_temp_string1 <- "Pling"
+    if (number %%5 ==0) my_temp_string2 <- "Plang"
+    if (number %%7 ==0) my_temp_string3 <- "Plong"
+    if (!(number %%3 ==0 | number %%5 ==0 | number %%7 ==0)) my_temp_string4 <- number
+    
+    return(paste(my_temp_string1,my_temp_string2,my_temp_string3,my_temp_string4, sep =""))
+}
+raindrops(28)
+raindrops(30)
+raindrops(34)
+
+
+```
+
