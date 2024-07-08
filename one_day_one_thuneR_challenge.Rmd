@@ -2409,4 +2409,23 @@ a <- 3+5 # returns nothing
 
 ```
 
+# Building a pseudo map function with Hadley
+
+```{r}
+
+simple_map <- function(x, f, ...) {
+    out <- vector("list",length(x))
+    for (i in seq_along(x)){
+        out[[i]] <- f(x[[i]], ...)
+    }
+    out
+}
+
+library(purrr)
+unlist(map(1:10, function(x) x*3))
+
+unlist(simple_map(1:10, function(x) x*3))
+
+```
+
 
