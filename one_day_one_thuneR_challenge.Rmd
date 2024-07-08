@@ -2252,4 +2252,119 @@ raindrops(34)
 
 
 ```
+# PlingPlangPlong function vectorized
+
+
+```{r}
+raindrops2 <- function(x) {
+
+    mod3 <- function(x) x %% 3 ==0
+    mod5 <- function(x) x %% 5 ==0 
+    mod7 <- function(x) x %% 7 ==0
+    no_mod <- function(x) !(mod3(x) | mod5(x) | mod7(x))
+    
+    my_funcs <- list(mod3,
+                     mod5,
+                     mod7,
+                     no_mod
+    )
+    
+    my_pling_plang_plung <- c("Pling","Plang","Plong",as.character(x))
+    paste(my_pling_plang_plung[sapply(my_funcs, do.call, list(x))], collapse = '')
+}
+
+
+raindrops2(28)
+raindrops2(30)
+raindrops2(34)
+
+
+```
+
+
+
+```{r}
+show_env <- function(){
+    a <- 1
+    b <- 2
+    c <- a
+    list(
+        ran_in = environment(),
+        parent = parent.env(environment()),
+        objs = ls.str(environment()),
+        objs_in_env = mget(ls(envir = environment()))
+    )
+    
+}
+
+show_env()
+
+
+```
+
+# Does this call to f2 returns an error?
+
+```{r}
+
+f2 <- function(a,b){
+    a *10
+}
+
+f2(10, stop("This is an error!"))
+# returns [1] 100
+
+
+```
+
+# Which base function has the most arguments
+
+```{r}
+
+typeof(sum)
+sum
+`[`
+(function(x)3)()
+(function(x,y,z) paste(x,y,z))("Hello","to","theworld")
+
+obj <- mget(ls("package:base", all = TRUE), inherits = TRUE)
+obj
+
+funs <- Filter(is.function, obj)
+funs
+str(funs)
+class(funs$abbreviate)
+
+formals(abbreviate)
+args(abbreviate)
+
+length(formals(abbreviate))
+
+which.max()
+which.max(lapply(funs, function(x) length(formals(x))))
+
+
+formals(scan)
+args(scan)
+?scan
+
+```
+
+# How many base functions have no arguments ?
+
+```{r}
+
+lapply(funs, function(x) Filter(x,length(formals(x)) == 0))
+
+length(funs[lapply(funs, function(x) length(formals(x))) ==0])
+
+length(funs[lapply(funs, function(x) length(formals(x))) ==0 & (lapply(funs,is.primitive)==FALSE)])
+# [1] 49 qui ne sont pas des primitives et qui n'ont pas d'arguements
+
+
+lapply(funs,is.primitive)
+
+args(seq_len)
+is.primitive(seq_len)
+
+```
 
