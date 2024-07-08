@@ -2428,4 +2428,19 @@ unlist(simple_map(1:10, function(x) x*3))
 
 ```
 
+# the map_ family 
+
+```{r}
+# the family of map_ returns vectors unlike map which allways return a list
+
+map_chr(mtcars, typeof)
+
+n_unique <- function(x) length(x)
+map_int(mtcars,n_unique )
+
+map_dbl(mtcars, mean)
+
+map_lgl(mtcars, is.double)
+
+```
 
