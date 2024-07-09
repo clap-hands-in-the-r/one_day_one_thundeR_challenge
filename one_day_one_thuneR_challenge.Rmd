@@ -2563,3 +2563,42 @@ g09() # [1] 81
 
 ```
 
+
+# A fresh start
+
+
+```{r}
+
+# At each invokation of a function, a new environment is created
+# and the values of varialbles at the end of the function are not kept
+g10 <- function(){
+    if(!exists("a")){
+        a <- 1
+    } else {
+        a <- a +1
+    }
+    a
+}
+g10() # [1] 1
+g10() # [1] 1
+
+a <- 5
+g10 <- function(){
+    if(!exists("a")){
+        a <- 1
+    } else {
+        a <- a +1
+    }
+    a
+}
+g10() #[1] 6
+g10() # [1] 6
+
+# args must be a list used with do.call
+args <- list(1:10, na.rm= TRUE)
+do.call(mean, args)
+
+
+```
+
+
