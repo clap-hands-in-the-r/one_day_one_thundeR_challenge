@@ -2511,3 +2511,31 @@ attr(brief_fun, "srcref")
 
 ```
 
+# R is a first-class function language
+
+```{r}
+# It means functions are objects in their own rights which is not the case
+# in most of other programming languages
+
+# Anonymous functions
+
+# compute how many occurences in each column
+lapply(mtcars, function(x) length(unique(x)))
+
+Filter(function(x) !is.numeric(x), iris)
+
+integrate(function(x) sin(x) ^2, 0, pi)
+
+# you can put functions in a list
+
+funs <- list(
+    double = function(x) x *2,
+    half = function(x) x/2
+)
+
+funs$double(10) # [1] 20
+funs$half(10) # [1] 5
+
+```
+
+
