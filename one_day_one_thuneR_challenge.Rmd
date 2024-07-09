@@ -2492,4 +2492,22 @@ g04()
 
 ```
 
+# Functions : body, formals (arguments), environment
+
+```{r}
+
+brief_fun <- function(x,y) {
+    # This is a comment 
+    # This is the inner body of the function
+    x +y
+    # and this is one last comment
+}
+
+
+body(brief_fun)
+# body displays only the code and stricly the code
+attr(brief_fun, "srcref")
+# attr displays all the body, it doesn't remove the comments
+
+```
 
