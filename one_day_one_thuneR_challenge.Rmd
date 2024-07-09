@@ -2444,3 +2444,52 @@ map_lgl(mtcars, is.double)
 
 ```
 
+# lexical scoping 1/name masking
+
+```{r}
+# name masking describes the fact that the names are coming from the most inside of functions
+# and are "masking" the names in the global environment
+
+x <- 1
+g01 <- function(){
+    x <- 10
+    x
+}
+g01() # [1] 10
+
+x <- 10
+y <- 20
+g02 <- function(){
+    x <- 1
+    c(x,y)
+}
+# if the name is not found in the function environment 
+# r looks up through the search path > above the function environment lies
+# the global environment
+g02() # [1]  1 20
+
+x <- 10
+y <- 20
+g03 <- function(){
+    x <- 1 
+    y <- 2
+    c(x,y)
+}
+g03()
+
+# same rules applies when a function is defined inside another function
+x <- 10
+g04 <- function(){
+    y <- 5
+    i <- function(){
+        z <- 7
+        c(x,y,z)
+    }
+    i()
+}
+g04()
+# [1] 10  5  7
+
+```
+
+
