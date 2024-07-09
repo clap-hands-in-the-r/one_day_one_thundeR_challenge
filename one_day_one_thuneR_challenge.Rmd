@@ -2538,4 +2538,28 @@ funs$half(10) # [1] 5
 
 ```
 
+# Functions vs variables
+
+```{r}
+g06 <- function(x) x + 100
+
+g07 <- function(x){
+    x <- 5
+    g06 <- function(x) x +1
+    g06(x)
+}
+g07() # [1] 6
+# same rules applies to function as to variables : lexical scoping
+# from the inside of the function to the outside
+
+g08 <- function(x) x^2
+g09 <- function(){
+    g08 <- 9
+    g08(g08)
+}
+g09() # [1] 81
+# the code above works but it is not advised because of names confusion! 
+
+
+```
 
