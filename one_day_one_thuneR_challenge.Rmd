@@ -2658,3 +2658,47 @@ str(i03(x=1,y=2,z=3))
 
 ```
 
+# Exit handlers 
+
+```{r}
+j06 <- function(x) {
+  cat("Hello\n")
+  on.exit(cat("Goodbye!\n"), add = TRUE)
+  
+  if (x) {
+    return(10)
+  } else {
+    stop("Error")
+  }
+}
+
+j06(TRUE)
+#> Hello
+#> Goodbye!
+#> [1] 10
+
+j06(FALSE)
+#> Hello
+#> Error in j06(FALSE): Error
+#> Goodbye!
+
+# on.exit is useful because it allows execute even if the code encouters 
+# an error after (it must be placed before the error occures)
+
+j06 <- function(x) {
+  cat("Hello\n")
+  
+  if (x) {
+    return(10)
+  } else {
+    stop("Error")
+  }
+    
+  on.exit(cat("Goodbye!\n"), add = TRUE)
+
+}
+
+j06(TRUE)
+j06(FALSE)
+```
+
