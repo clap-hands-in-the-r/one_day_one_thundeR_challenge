@@ -2601,4 +2601,36 @@ do.call(mean, args)
 
 ```
 
+# Dot dot dot!
+
+```{r}
+
+i01 <- function(y, z){
+    list(y = y, z = z)
+}
+i02 <- function(x, ...){
+    i01(...)
+    
+}
+str(i02(x=1, y = 2, z =3))
+# List of 2
+#  $ y: num 2
+#  $ z: num 3
+
+
+i01 <- function(y,z){
+    list(y =y, z=z)
+}
+i02 <- function(x, ...){
+    list(i01(...), x)
+}
+str(i02(x=1,y=2,z=3))
+# List of 2
+#  $ :List of 2
+#   ..$ y: num 2
+#   ..$ z: num 3
+#  $ : num 1
+
+
+```
 
