@@ -2634,3 +2634,27 @@ str(i02(x=1,y=2,z=3))
 
 ```
 
+# Still about ellipsis
+
+```{r}
+# Use of ..N th
+i04 <- function(...){
+    list(first = ..1, third = ..3)
+    
+}
+
+str(i04(x=1,y = 10, z=3))
+
+
+i03 <- function(...){
+    list(...)
+}
+str(i03(x=1,y=2,z=3))
+# List of 3
+#  $ x: num 1
+#  $ y: num 2
+#  $ z: num 3
+
+
+```
+
