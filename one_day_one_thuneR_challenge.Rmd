@@ -2761,3 +2761,22 @@ second(x) <- 14
 ```
 
 
+# Lazy evaluation
+
+```{r}
+# In R, arguments are lazily evaluated meaning that an argument
+# is evaluated when and only when it is expressly computed in an operation
+
+h01 <- function(x) 1
+h01()# [1] 1
+h01(stop("This is an error")) # [1] 1
+
+# whereas the call of the function below raises an error
+
+h02 <- function(x) x
+h02(stop("Tis is an error")) # Error in h02(stop("Tis is an error")) : Tis is an error
+
+
+```
+
+
