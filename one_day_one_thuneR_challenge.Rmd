@@ -2725,3 +2725,39 @@ f(10)
 
 ```
 
+# Replacement function
+
+```{r}
+
+`second<-` <- function(x,value){
+    x[2] <- value
+    x
+}
+x <- 1:10
+x
+second(x) <- 23
+x
+second(x,99) #Error in second(x, 99) : could not find function "second"
+`second<-`(x,99) #[1]  1 99  3  4  5  6  7  8  9 10
+# the previous call makes a print but it dose'nt modify x
+x #[1]  1 23  3  4  5  6  7  8  9 10
+
+# the only form that works is like below
+second(x) <- 99
+x #  [1]  1 99  3  4  5  6  7  8  9 10
+
+# hadley makes us realize that while doing this operation
+# apparently we modifiy in place but in fact this is a copy on modify
+# object c is copied and modifies, which we can see here
+
+tracemem(x) #[1] "<0000023CFA2A8288>"
+x # [1]  1 99  3  4  5  6  7  8  9 10
+second(x) <- 14 
+# tracemem[0x0000023cfa2a8288 -> 0x0000023cfb1bd518]: 
+# tracemem[0x0000023cfb1bd518 -> 0x0000023cfb1bd5c8]: second<- 
+
+
+
+```
+
+
