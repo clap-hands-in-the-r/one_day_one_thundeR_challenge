@@ -2779,4 +2779,34 @@ h02(stop("Tis is an error")) # Error in h02(stop("Tis is an error")) : Tis is an
 
 ```
 
+# Promises
+
+```{r}
+y <- 10
+h02 <- function(x){
+    y <- 100
+    x + 1
+}
+h02(y) #[1] 11
+# when a variable is not accessed inside the function it is not evaluated inside
+# just for clarity :
+rm(y)
+h02 <- function(x){
+    y <- 100
+    x + 1
+}
+h02(y) # Error in h02(y) : object 'y' not found
+
+y <- 10
+h02 <- function(x){
+    y <- 100
+    x + 1
+}
+h02(y <- 90) # [1] 91
+y # [1] 90
+# when the argument is passed toward an assignment
+# the assignment is passed outside ie in the global environment
+
+
+```
 
