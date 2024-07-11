@@ -2700,5 +2700,28 @@ j06 <- function(x) {
 
 j06(TRUE)
 j06(FALSE)
+
+
+```
+
+# Function composition example
+
+```{r}
+
+f <- function(x){
+    f <- function(x){
+        f <- function(){
+            x ^2
+        }
+        f() +1
+    }
+    f(x)*2
+}
+
+# guess the result of f(10)
+
+f(10)
+# [1] 202
+
 ```
 
