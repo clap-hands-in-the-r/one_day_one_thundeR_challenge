@@ -2810,3 +2810,25 @@ y # [1] 90
 
 ```
 
+# Promises part 2
+
+```{r}
+
+double <- function(x){
+    message("Computing...")
+    x * 2
+}
+h03 <- function(x){
+    c(x,x)
+}
+
+h03(double(10))
+# Computing...
+# [1] 20 20
+# the message "computing" is displayed only once because of the promises system
+# and cashing
+
+
+
+```
+
