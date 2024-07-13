@@ -2832,3 +2832,35 @@ h03(double(10))
 
 ```
 
+# Replacement fonction comme back and evolution
+
+```{r}
+`second<-` <- function(x, value){
+    x[2] <- value
+    x
+}
+vec <- 1:10
+
+second(vec) <- 99
+vec
+
+`modify<-` <- function(x, position,value){
+    x[position] <- value
+    x
+}
+
+modify(vec,10) <- 99
+vec
+
+`modify<-`(vec,9,99)
+# the above call to the function display vec modified,
+# but if you call vec again, you'll see that it has not really been
+# modified!
+vec
+# if you want to make this sort of call really modify vec
+# you need to write it like this
+vec <- `modify<-`(vec,9,99)
+vec
+
+```
+
