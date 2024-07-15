@@ -2863,4 +2863,51 @@ vec <- `modify<-`(vec,9,99)
 vec
 
 ```
+# Rewrite purrr::map again
+
+```{r}
+
+my_simple_map <- function(x, f, ...){
+    out <- vector("list",length(x))
+    for (i in seq_along(x)){
+        out[[i]] <- f(x[[i]], ...)
+        #print(x[[i]])
+    }
+    out
+}
+
+double <- function(x) x *2
+
+
+my_simple_map(1:10,function(x) x * 3)
+
+
+library(purrr)
+
+# built a list of length 10
+vec <- vector("list",length =10)
+
+map(mtcars, function(x) length(unique(x)))
+# is equivalent to
+map(mtcars, ~ length(unique(.x)))
+# to see what happens inside
+as_mapper(map(mtcars, ~ length(unique(.x))))
+
+pair <- function(x){
+    c(x,x)
+}
+# map_ functions must take a vector as input
+# and throw a vector as output
+
+map_dbl(1:3,pair)
+# ! Result must be length 1, not 2.
+
+map(1:3, pair) # no problem
+
+map_chr(1:2, as.character)
+# [1] "1" "2"
+
+
+```
+
 
