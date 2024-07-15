@@ -2909,5 +2909,18 @@ map_chr(1:2, as.character)
 
 
 ```
+# Functionnal
+
+```{r}
+# a functionnal is a function that takes a function as an input and returns a
+# vector as an output
+
+randomise <- function(f) f(runif(1e6))
+randomise(mean)
+randomise(sum)/length(runif(1e6))
+
+
+
+```
 
 
