@@ -2919,8 +2919,62 @@ randomise <- function(f) f(runif(1e6))
 randomise(mean)
 randomise(sum)/length(runif(1e6))
 
+```
+# Deeper in map, subtle difference between passing extra args to map or to anonymous function
+
+```{r}
+library(purrr)
+plus <- function(x,y) x + y
+x <- c(0,0,0,0)
+
+map_dbl(x, plus, runif(1) )
+# [1] 0.8371988 0.8371988 0.8371988 0.8371988
+
+# when extra arg is passed to the anonymous func, it is evaluated 
+# for each occurence whereas when it's passed as an argument of map
+# it is evaluated just once
+map_dbl(x, ~ plus(.x, runif(1)))
+# [1] 0.8135708 0.2860515 0.3920524 0.9550753
+
+map_dbl(x, function(x) x + runif(1))
+# [1] 0.29412014 0.27862062 0.44238775 0.07654727
+
 
 
 ```
 
+# Risk of arguments confusion in map
+
+```{r}
+
+simple_map <- function(x, f, ...){
+    out <- vector("list", length(x))
+    for (i in seq_along(x)) {
+        out[[i]] <- f(x[[i]], ...)
+    }
+    out
+}
+
+
+bootsrap_summary <- function(x, f){
+    f(sample(x, replace = TRUE))
+}
+
+simple_map(mtcars, bootsrap_summary, f = mean)
+# Error in mean.default(x[[i]], ...) : 
+#   'trim' doit être une valeur numérique de longueur un
+
+simple_map(mtcars, function(x) length(unique(x)))
+library(purrr)
+map(mtcars, function(x) length(unique(x)))
+
+# this one is working because R is matching arguments in place and there is no confusion
+simple_map(mtcars, bootsrap_summary, mean)
+
+?map
+# Hadley explains that arguments confusion is the reason why the purrr package uses
+# arguments names .x and .f ie to avoid 99% confusion cases occure
+# from help : ap(.x, .f, ..., .progress = FALSE)
+
+```
 
