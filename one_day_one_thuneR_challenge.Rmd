@@ -2978,3 +2978,30 @@ simple_map(mtcars, bootsrap_summary, mean)
 
 ```
 
+# Modify from purrr : same as map but output same form as input
+
+```{r}
+
+library(purrr)
+
+# if we want to double each col of mtcars
+# map function sends back to us a result but in form of a list
+map(mtcars, ~ .x *2)
+mtcars
+# modify returns us the expected result but as a data frame 
+modify(mtcars, ~.x *2)
+
+# despite its name modify does not modify in place
+# as usual you need to assign the result if you want to keep the new datas
+
+df <- modify(mtcars, ~.x *2)
+# note that the above form is just the same as with anonymous function
+df2 <- modify(mtcars, function(x) x *2)
+identical(df,df2) # [1] TRUE
+
+```
+
+
+
+
+
