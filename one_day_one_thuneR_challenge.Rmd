@@ -3001,7 +3001,36 @@ identical(df,df2) # [1] TRUE
 
 ```
 
+# Write your own modify
 
+```{r}
+
+simple_modify <- function(x, f, ...){
+    for (i in seq_along(x)){
+    x[[i]] <- f(x[[i]],...)
+    }
+    x
+}
+
+
+
+# ça fonctionne bien!!
+simple_modify(mtcars, function(x) x*2)
+mtcars
+
+# par contre, ci-dessous, ça ne fonctionne pas,
+# c'est une syntaxe propre à purrr
+simple_modify(mtcars,~ .x*2)
+# Error in f(x[[i]], ...) : could not find function "f"
+
+x <- runif(15)
+mean(x)
+mean(x, trim = 0) # 0.4285483
+mean(x, trim= 0.1) # [1] 0.42169
+
+# trim  the fraction (0 to 0.5) of observations to be trimmed from each end of x before the mean is computed. Values of trim outside that range are taken as the nearest endpoint.
+
+```
 
 
 
