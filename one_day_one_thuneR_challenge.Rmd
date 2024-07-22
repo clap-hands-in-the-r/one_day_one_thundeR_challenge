@@ -3032,5 +3032,60 @@ mean(x, trim= 0.1) # [1] 0.42169
 
 ```
 
+# Dealing with no outputs functions with friends
 
+```{r}
+
+my_friends_names <- c("Hadley","July")
+
+welcome <- function(x){
+    cat("Welcome ", x, "!\n", sep ="")
+}
+library(purrr)
+map(my_friends_names,welcome)
+## map displays like this :
+# Welcome Hadley!
+# Welcome July!
+# [[1]]
+# NULL
+# 
+# [[2]]
+# NULL
+
+walk(my_friends_names,welcome)
+# Better with walk
+# Welcome Hadley!
+# Welcome July!
+
+```
+
+# Metaprogramming
+
+```{r}
+library(rlang)
+library(lobstr)
+
+# Capture expression with rlang::expr
+expr(mean(1:10, na.rm = TRUE))
+
+# capture  code you passed to a function with rlang::enexpr
+# enexpr is like enrich expression
+capture_it <- function(x){
+    enexpr(x)
+}
+
+rlang::enexpr("a + b + c")
+
+capture_it(a + b +c)
+
+# once you capture an expression,
+# you can work with it as with a list
+
+my_f <- expr(f(x = 1, y = 10))
+str(my_f)
+my_f$z = 1100
+my_f
+
+
+```
 
