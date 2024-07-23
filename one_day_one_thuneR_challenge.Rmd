@@ -3174,3 +3174,25 @@ prev
 
 ```
 
+# Manipulating expressions with hadley + code can be respresented as a tree (ast = abstract syntax tree)
+
+```{r}
+library(rlang)
+library(lobstr)
+f <- expr(f(x =1 , y = 7))
+f$z <- 14
+f[[1]] <- NULL
+f
+
+# See the expression as a tree
+lobstr::ast(f(a, "b"))
+
+ast(f(a, 1, z(h(a, d))))
+
+ast(f1(f2(a,b),f3(1,f4(2))))
+
+ast(1 + 2 * 3)
+
+
+```
+
