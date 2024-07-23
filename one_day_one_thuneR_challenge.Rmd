@@ -3196,3 +3196,37 @@ ast(1 + 2 * 3)
 
 ```
 
+# Code can generate code!
+
+```{r}
+
+## compose a function with rlang::call2
+
+call2("f",1,2,3)
+# f(1, 2, 3)
+call2("+",1,call2("*",2,3))
+# 1 + 2 * 3
+my_func <- call2("+",1,call2("*",2,3))
+eval(my_func) # [1] 7
+
+# you can also unquote with bang bang !!
+
+x <- expr(x + x)
+y <- expr(y + y)
+compose <- expr(!!x / !!y)
+compose # (x + x)/(y + y)
+# !! allows us to inserts a fraction of code into code (the code tree into an expression)
+
+
+cv <- function(var){
+    var <- enexpr(var)
+    expr(sd(!!var)/mean(!!var))
+}
+
+cv(x) # sd(x)/mean(x)
+cv('(') # sd("(")/mean("(")
+cv(x+y) # sd(x + y)/mean(x + y)
+
+
+```
+
