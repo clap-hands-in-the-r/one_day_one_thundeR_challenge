@@ -3089,3 +3089,69 @@ my_f
 
 ```
 
+# Datalab with Rafa Irizarry - ml
+
+```{r}
+library(dslabs)
+library(tidyverse)
+library(caret)
+
+y <- heights$sex
+x <- heights$height
+
+set.seed(2007)
+
+
+test_index <- createDataPartition(y, times=1, p =0.5, list = FALSE)
+test_set <- heights[test_index,]
+train_set <- heights[-test_index,]
+
+
+# First hypothesis = accuracy by guessing
+
+y_hat <- sample(c("Male","Female"),length(test_index),replace = TRUE) |> factor(levels = levels(test_set$sex))
+accuracy <- mean(y_hat == test_set$sex)
+
+# Exploring
+
+heights |> group_by(sex) |> summarize(
+    mean(height),
+    sd(height)
+)
+
+# second hypothesis = above 62 inches is male
+
+y_hat <- ifelse(test_set$height > 62, "Male", "Female") |> factor(levels = levels(test_set$sex))
+accuracy <- mean(y_hat == test_set$sex)
+
+
+y_hat <- ifelse(x > 62, "Male", "Female") |> factor(levels = levels(test_set$sex))
+accuracy <- mean(y_hat == y)
+
+# better guessing with experimentations
+
+cutoff <- seq(61,69)
+
+compute_accuracy_given_cutoff <- function(cutoff){
+    
+    y_hat <- ifelse(train_set$height > cutoff, "Male", "Female") |> 
+        factor(levels=levels(train_set$sex))
+    mean(y_hat == train_set$sex)
+    
+}
+
+library(purrr)
+accuracy <- map_dbl(cutoff, compute_accuracy_given_cutoff)
+
+plot(cutoff,accuracy, type = "b")
+max(accuracy)
+
+best_cutoff <- cutoff[which.max(accuracy)]
+
+y_hat <- ifelse(test_set$height > best_cutoff, "Male","Female")
+# Measuring accuracy on the test set. It is less than measured on train, however still good
+mean(y_hat == test_set$sex)
+
+
+
+```
