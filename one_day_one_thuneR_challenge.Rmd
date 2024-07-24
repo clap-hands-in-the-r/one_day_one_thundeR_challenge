@@ -3227,6 +3227,68 @@ cv(x) # sd(x)/mean(x)
 cv('(') # sd("(")/mean("(")
 cv(x+y) # sd(x + y)/mean(x + y)
 
+eval(cv, env(var=1:10))
+
+eval(expr(x + y), env(x =1 , y = 10)) # [1] 11
+
+typeof(cv) #[1] "closure"
+eval(cv(1:10)) # [1] 0.5504819
+
+
+```
+
+# Confusion matrice
+
+```{r}
+library(dslabs)
+library(caret)
+library(tidyverse)
+y <- heights$sex
+x <- heights$height
+test_index <- createDataPartition(y, times = 1, p=0.5, list = FALSE)
+
+test_set <- heights[test_index,]
+train_set <- heights[-test_index,]
+y_hat <- ifelse(test_set$height> 64, "Male","Female") |> factor(levels = levels(test_set$sex))
+
+mat <- table(predicted = y_hat, actual = test_set$sex)
+typeof(mat)
+rownames(mat) <- c("y_hat = 0", "y_hat = 1")
+colnames(mat) <- c("y = 0", "y = 1")
+mat
+str(mat)
+mat2 <- mat
+mat2 <- data.frame("y=0" = c("True negative","False positive"),"y=1" = c("False negative","True positive"))
+
+# sensitivity = TP/(TP + FN)
+TP <- mat[dimnames(mat)$predicted == "y_hat = 1",dimnames(mat)$actual == "y = 1"]
+FN <- mat[dimnames(mat)$predicted == "y_hat = 0",dimnames(mat)$actual == "y = 1"]
+
+sensitivity <- TP/(TP+FN)    
+
+# specificity = TN/(TN+FP)
+TN <- mat[dimnames(mat)$predicted == "y_hat = 0",dimnames(mat)$actual == "y = 0"]
+FP <- mat[dimnames(mat)$predicted == "y_hat = 1",dimnames(mat)$actual == "y = 0"]
+specificity <- TN/(TN+FP)
+specificity
+
+str(test_set$sex)
+test_set$sex <- factor(test_set$sex, levels =c("Male","Female"))
+str(test_set$sex)
+str(y_hat)
+y_hat <- factor(y_hat, levels =c("Male","Female"))
+str(y_hat)
+
+# PPV Predicted positive value = TP/(TP+FP)
+ppv <- TP/(TP+FP)
+ppv
+
+# automaticly computed with confusion matrix
+cm <- confusionMatrix(data = y_hat, reference = test_set$sex)
+cm
+sensitivity
+specificity
+
 
 ```
 
