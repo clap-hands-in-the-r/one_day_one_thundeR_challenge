@@ -3292,3 +3292,45 @@ specificity
 
 ```
 
+# Balanced accuracy and F_meas 
+
+```{r}
+
+# sensitivity is also called TPR also called Recall
+# specificity is also called TNR also called 1-FPR (False Positive Ratio)
+# another measure of specificity is PPV (positive predicted value) also called precision
+
+# In order to balance sensitivity and specificity,
+# we can elaborate a new indicator
+# F_meas
+# F_meas = 1 / ( 1/2 * ( 1/recall + 1/precision))
+
+library(purrr)
+
+cutoff <- seq(61,70)
+
+F_1 <- map_dbl(cutoff,
+               function(x){
+    y_hat <- ifelse(train_set$height > x, "Male","Female") |> factor(levels = levels(train_set$sex))
+    F_meas(data = y_hat, reference = factor(train_set$sex))
+ }
+)
+
+show_point_df <- data.frame(cutoff, F_1)
+
+ggplot(show_point_df, aes(x=cutoff,y = F_1)) + geom_point() + geom_line()
+
+F_1
+max(F_1)
+best_cutoff <- cutoff[which.max(F_1)]
+best_cutoff
+
+```
+
+
+```{r}
+read_mnist()
+
+
+```
+
