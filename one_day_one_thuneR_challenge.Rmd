@@ -3327,9 +3327,49 @@ best_cutoff
 
 ```
 
+# ROC curves
 
 ```{r}
-read_mnist()
+
+set.seed(2007)
+
+test_index <- createDataPartition(y, times = 1, p = 0.5, list = FALSE )
+x <- heights$height
+y <- heights$sex
+
+n <- length(test_index)
+p <- 0.9
+y_hat_by_guessing <- sample(c("Male","Female"), prob = c(p,1-p), size = n, replace = TRUE)
+
+# accuracy :
+mean(test_set$sex ==  y_hat_by_guessing)
+
+probs <- seq(0,1, length.out = 10)
+
+guessing <- map_df(
+    probs,
+    function(p){
+        y_hat <- sample(c("Male","Female"), size = n, prob = c(p, 1- p), replace = TRUE) |> 
+            factor(levels = c("Male","Female"))
+        TPR <- sensitivity(data = y_hat, reference = test_set$sex)
+        FPR <- 1 - specificity(data = y_hat, reference = test_set$sex)
+        list(method = "guessing",
+             FPR = FPR,
+             TPR = TPR)
+        
+    }
+    
+)
+
+plot(guessing$FPR,guessing$TPR)
+
+
+table(predicted = y_hat_by_guessing, actual = train_set$sex)
+tp_tn_fp_fn_rate <- data.frame(Female = c("True positives (TP)","False negatives (FN)"),
+                               Male = c("False positives (FP)", "True negatives (TN"))
+tp_tn_fp_fn_rate
+
+
 
 
 ```
