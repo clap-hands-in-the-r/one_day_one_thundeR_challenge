@@ -3385,8 +3385,12 @@ options_list[grep("LAN*", options_list)]
 
 grep("LAN*", options_list)
 
+```
 
+# Write an ascii representation of your datas with dput
 
+```{r}
+dput(mtcars)
 
 ```
 
