@@ -3370,6 +3370,22 @@ tp_tn_fp_fn_rate <- data.frame(Female = c("True positives (TP)","False negatives
 tp_tn_fp_fn_rate
 
 
+```
+
+# Set language to english
+
+```{r}
+# This is how to set language environment to english
+# it's easyer to find a match on the web for an english error message
+
+Sys.setenv(LANGUAGE = "en")
+options_list <- Sys.getenv()
+typeof(options_list)
+options_list[grep("LAN*", options_list)]
+
+grep("LAN*", options_list)
+
+
 
 
 ```
