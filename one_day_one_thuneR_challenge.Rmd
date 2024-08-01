@@ -3394,3 +3394,20 @@ dput(mtcars)
 
 ```
 
+# First data exploration with Hadley R4ds and ggplot
+
+```{r}
+library(tidyverse)
+data(mpg)
+head(mpg)
+?mpg
+# displ engine displacement in litres
+# hwy hyghway miles per gallon
+
+ggplot(data = mpg) + geom_point(aes(x = displ, y = hwy))
+
+ggplot(data = mpg) + geom_point(aes(x = displ, y = hwy, colour = class))
+
+
+```
+
