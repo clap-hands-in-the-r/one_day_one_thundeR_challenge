@@ -3479,5 +3479,16 @@ for (i in seq_along(mt)){
 }
 # returns all col one by one one below one
 
-```
+output <- vector("numeric",length = 5)
+for (i in seq_along(d)){
+    output[[i]] <- median(d[[i]])
+}
 
+for (i in seq_along(d)){
+    output[[i]] <- mean(d[[i]])/2
+}
+
+```
+# next tester de remplir un output créer avant la boucle 
+# cet output initial sera de différentes formes (df, vec)
+# vérifier la nature de l'objet après son remplissage par la boucle
