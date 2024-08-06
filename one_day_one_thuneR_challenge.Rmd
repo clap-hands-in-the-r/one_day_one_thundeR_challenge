@@ -3489,6 +3489,49 @@ for (i in seq_along(d)){
 }
 
 ```
+
+# GGplot with multiple layers of geom
+
+```{r}
+library(ggplot2)
+data(mpg)
+
+ggplot(mpg, mapping = aes(x = displ , y = hwy)) +
+    geom_point() +
+    geom_smooth()
+
+# render the same as previous one but the previous one is a simpler version to write
+# because the arguments are written just once
+ggplot(mpg) +
+    geom_point(mapping = aes(x = displ , y = hwy)) +
+    geom_smooth(mapping = aes(x = displ , y = hwy))
+
+
+# I love this one
+ggplot(mpg, mapping = aes(x = displ , y = hwy)) +
+    geom_point(aes(colour = class)) +
+    geom_smooth()
+
+# When a geom is unique like for linetype, if you group, you 
+
+ggplot(mpg, mapping = aes(x = displ, y = hwy)) +
+    geom_smooth(aes(group = class), se= FALSE)
+
+# almost the same as below because ggplot performs a grouping under the wood
+# in this second form
+ggplot(mpg, mapping = aes(x = displ, y = hwy)) +
+    geom_smooth(aes(linetype = class, colour = class), se = FALSE)
+
+
+# A strange one
+ggplot(mpg, mapping = aes(x = displ , y = hwy)) +
+    geom_point(aes(colour = class)) +
+    geom_smooth(aes(group = class))
+
+
+```
+
+
 # next tester de remplir un output créer avant la boucle 
 # cet output initial sera de différentes formes (df, vec)
 # vérifier la nature de l'objet après son remplissage par la boucle
