@@ -3532,6 +3532,39 @@ ggplot(mpg, mapping = aes(x = displ , y = hwy)) +
 ```
 
 
+
+# geom_bar and geom_hist 
+
+```{r}
+library(tidyverse)
+dim(diamonds)
+
+# Bar plots for discrete variables
+ggplot(diamonds) +
+    geom_bar(mapping = aes(x = cut))
+
+# summary of the datas 
+diamonds |> 
+    count(cut)
+
+# Histograms for continuous variables
+
+ggplot(diamonds) +
+    geom_histogram(aes(carat), binwidth = 0.5)
+
+# summary of the datas 
+# cut_width is from ggplot
+diamonds |> 
+    count(cut_width(carat,05))
+?cut_width
+
+
+
+```
+
+
+### Notes pour plus tard
+
 # next tester de remplir un output créer avant la boucle 
 # cet output initial sera de différentes formes (df, vec)
 # vérifier la nature de l'objet après son remplissage par la boucle
