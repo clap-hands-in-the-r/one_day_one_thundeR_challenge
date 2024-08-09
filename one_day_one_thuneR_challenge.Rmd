@@ -3558,9 +3558,22 @@ diamonds |>
     count(cut_width(carat,05))
 ?cut_width
 
+```
 
+# Coord flip to pivote a bar plot and coord polar to draw a circular diagram
+
+```{r}
+library(tidyverse)
+ggplot(diamonds)+
+    geom_bar(aes(x = cut, fill = cut), width = 1) +
+    coord_flip()
+
+ggplot(diamonds)+
+    geom_bar(aes(x = cut, fill = cut), width = 1) +
+    coord_polar()
 
 ```
+
 
 
 ### Notes pour plus tard
