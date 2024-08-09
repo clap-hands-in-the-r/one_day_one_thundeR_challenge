@@ -3574,6 +3574,24 @@ ggplot(diamonds)+
 
 ```
 
+# Two histograms with two differents scales
+
+```{r}
+library(tidyverse)
+ggplot(diamonds) +
+    geom_histogram(aes(x = carat), binwidth = 0.5)
+
+small <- filter(diamonds, carat < 3)
+
+ggplot(small) +
+    geom_histogram(aes(x = carat), binwidth = 0.1)
+
+ggplot(small) +
+    geom_freqpoly(aes(x = carat, colour = cut), binwidth = 0.1)
+
+
+```
+
 
 
 ### Notes pour plus tard
