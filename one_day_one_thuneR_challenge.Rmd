@@ -3592,6 +3592,31 @@ ggplot(small) +
 
 ```
 
+# Different scales !!!
+
+```{r}
+library(tidyverse)
+
+ggplot(diamonds) + 
+    geom_histogram(aes(x = carat), binwidth = 0.1)
+
+ggplot(diamonds) + 
+    geom_histogram(aes(x = carat), binwidth = 0.01)
+
+ggplot(diamonds) + 
+    geom_histogram(aes(x = carat), binwidth = 0.01) +
+    coord_cartesian(ylim = c (0, 25))
+
+head(diamonds)
+    
+ggplot(diamonds) + 
+    geom_histogram(aes(x = y), binwidth = 0.5) +
+    coord_cartesian(ylim = c (0, 50))
+
+
+```
+
+
 
 
 ### Notes pour plus tard
