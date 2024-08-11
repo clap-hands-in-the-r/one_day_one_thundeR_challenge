@@ -3616,6 +3616,30 @@ ggplot(diamonds) +
 
 ```
 
+# Data frames copy and modify and impact on memory in R
+
+```{r}
+library(ggplot2)
+data(diamonds)
+diamonds2 <- diamonds |> 
+    dplyr::mutate(price_per_carat = price/carat)
+library(pryr)
+pryr::object_size(diamonds) # 3.46 MB
+object_size(diamonds2) # 3.89 MB
+object_size(diamonds,diamonds2) # 3.89 MB
+# the size of the two objects is equivalent to the size of the biggest
+# because the two data frames are pointing to the same object
+# at this precise moment
+
+diamonds2$carat[1] <- NA
+object_size(diamonds2) # 3.89 MB
+object_size(diamonds,diamonds2) # 4.32 MB
+# when we modified diamonds2, a real copy was created!
+# This is why the size of the two objects combined increased
+
+
+
+```
 
 
 
