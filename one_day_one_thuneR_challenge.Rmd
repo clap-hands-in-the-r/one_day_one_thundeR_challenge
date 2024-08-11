@@ -3641,6 +3641,35 @@ object_size(diamonds,diamonds2) # 4.32 MB
 
 ```
 
+# Changing the default stat associated with a geom, an exemple
+
+```{r}
+
+library(tidyverse)
+demo <- tribble(
+    ~ a, ~ b ,
+    "bar_1", 20,
+    "bar_2", 30,
+    "bar_3", 40
+)
+
+# every geom has a default stat associated and every stat has a 
+# default geom associated. 
+# we can change the default stat associated
+# here we change the geom_bar default stat which is count to identity
+
+# geom_bar
+# function (mapping = NULL, data = NULL, stat = "count"
+ggplot(demo) +
+    geom_bar(mapping = aes(x = a, y = b), stat = "identity")
+
+# here stat = "count" is not appropriate give the datas in "demo" df
+ggplot(demo) +
+    geom_bar(mapping = aes(x = a, y = b), stat = "count")
+
+```
+
+
 
 
 ### Notes pour plus tard
