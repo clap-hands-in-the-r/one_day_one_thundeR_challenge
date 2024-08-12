@@ -1,0 +1,73 @@
+---
+title: "machine_learning_with_rafa.Rmd"
+author: "Mael Elegoet"
+date: "2024-08-12"
+output: html_document
+---
+
+
+# Loading packages required
+
+```{r}
+library(dslabs)
+library(caret)
+library(tidyverse)
+```
+
+
+# First approach of prediction
+
+```{r}
+data("heights")
+head(heights)
+# Sex will be the outcome we want to predict
+# and height will be our predictor / our feature
+
+# we call the outcome y and the predictor x
+
+y <- heights$sex
+x <- heights$height
+
+# Caret package contains a function that helps us to create 
+# a test set and a train set
+
+test_index <- createDataPartition(y,times =1, p =0.5, list = FALSE)
+test <- heights[test_index,]
+train <- heights[-test_index,]
+
+# predict the sex by randomly guessing and measure the accuracy
+# we'll call our guessing, our prediction y_hat
+
+# caret package enables computation of accuracy etc on outcome that comes on the form
+# of a factor
+y_hat <- sample(c("Male","Female"), size = length(test_index), replace = TRUE) |> factor(c("Male","Female"))
+
+# Measurement of overall accuracy
+mean(test$sex == y_hat) # [1] 0.5009524
+
+# Can we do better than guessing ?
+
+summary(heights)
+my_summary <- heights |> 
+    group_by(sex) |>
+    summarise(Mean = mean(height), Median = median(height), SD = sd(height))
+
+
+#   sex     Mean Median    SD
+#   <fct>  <dbl>  <dbl> <dbl>
+# 1 Female  64.9   65.0  3.76
+# 2 Male    69.3   69    3.61
+
+heights |> 
+    summarise(Mean = mean(height), Median = median(height), SD = sd(height))
+# Male height minus 2 standard deviations from the mean
+
+my_cutoff <- my_summary |> filter(sex == "Male") |> mutate(my_cutoff = Mean - 2 * SD) |> pull(my_cutoff)
+
+y_hat <- ifelse(test$height > my_cutoff, "Male","Female") |> factor(levels = levels(test$sex))
+
+# Compute the new overall accuracy given our new algorithm
+mean(test$sex == y_hat) # [1] 0.7847619
+
+```
+
