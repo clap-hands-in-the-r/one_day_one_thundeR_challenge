@@ -1,10 +1,3 @@
----
-title: "machine_learning_with_rafa.Rmd"
-author: "Mael Elegoet"
-date: "2024-08-12"
-output: html_document
----
-
 
 # Loading packages required
 
@@ -12,6 +5,8 @@ output: html_document
 library(dslabs)
 library(caret)
 library(tidyverse)
+library(purrr)
+
 ```
 
 
@@ -31,9 +26,11 @@ x <- heights$height
 # Caret package contains a function that helps us to create 
 # a test set and a train set
 
+set.seed(2007)
+
 test_index <- createDataPartition(y,times =1, p =0.5, list = FALSE)
-test <- heights[test_index,]
-train <- heights[-test_index,]
+test_set <- heights[test_index,]
+train_set <- heights[-test_index,]
 
 # predict the sex by randomly guessing and measure the accuracy
 # we'll call our guessing, our prediction y_hat
@@ -43,7 +40,7 @@ train <- heights[-test_index,]
 y_hat <- sample(c("Male","Female"), size = length(test_index), replace = TRUE) |> factor(c("Male","Female"))
 
 # Measurement of overall accuracy
-mean(test$sex == y_hat) # [1] 0.5009524
+mean(test_set$sex == y_hat) # [1] 0.5161905
 
 # Can we do better than guessing ?
 
@@ -64,10 +61,46 @@ heights |>
 
 my_cutoff <- my_summary |> filter(sex == "Male") |> mutate(my_cutoff = Mean - 2 * SD) |> pull(my_cutoff)
 
-y_hat <- ifelse(test$height > my_cutoff, "Male","Female") |> factor(levels = levels(test$sex))
+y_hat <- ifelse(test_set$height > my_cutoff, "Male","Female") |> factor(levels = levels(test$sex))
 
 # Compute the new overall accuracy given our new algorithm
-mean(test$sex == y_hat) # [1] 0.7847619
+mean(test_set$sex == y_hat) [1] 0.7809524
+
+```
+
+# Best cutoff
+
+```{r}
+# Could we improve our cutoff
+
+# we must do our exploratories on the train set 
+# and keep the test set for confirmation
+
+# we are going to try cutoffs from 61 to 69 (69 is the median height for males)
+
+cutoff <- seq(61,70)
+
+accuracy <- map_dbl(cutoff, function(x){
+    y_hat <- ifelse(train_set$height > x, "Male", "Female") |> factor(levels = levels(train_set$sex))
+    mean(train_set$sex == y_hat)
+})
+
+df <- data.frame(cutoff = cutoff, accuracy = accuracy)
+
+# Visualize accuracy according to cutoff
+ggplot(df, mapping = aes(x = cutoff, y = accuracy)) + geom_point() + geom_line()
+
+
+max(accuracy) # [1] 0.8495238
+cutoff[which.max(accuracy)] # [1] 64
+# the maximum accuracy reached is 0.84 for a cutoff of 64
+
+# apply this cutoff to the test set in order to compute accuracy
+
+y_hat <- ifelse(test_set$height > 64, "Male", "Female") |> factor(levels = levels(test_set$sex))
+mean(test_set$sex == y_hat) # [1] 0.8038095
+
+# overall accuracy observed on the test set is a bit lower but is still really good
 
 ```
 
