@@ -40,7 +40,7 @@ train_set <- heights[-test_index,]
 y_hat <- sample(c("Male","Female"), size = length(test_index), replace = TRUE) |> factor(c("Male","Female"))
 
 # Measurement of overall accuracy
-mean(test_set$sex == y_hat) # [1] 0.5161905
+mean(y_hat == test_set$sex) # [1] 0.5161905
 
 # Can we do better than guessing ?
 
@@ -64,7 +64,7 @@ my_cutoff <- my_summary |> filter(sex == "Male") |> mutate(my_cutoff = Mean - 2 
 y_hat <- ifelse(test_set$height > my_cutoff, "Male","Female") |> factor(levels = levels(test$sex))
 
 # Compute the new overall accuracy given our new algorithm
-mean(test_set$sex == y_hat) [1] 0.7809524
+mean(y_hat == test_set$sex) [1] 0.7809524
 
 ```
 
@@ -82,7 +82,7 @@ cutoff <- seq(61,70)
 
 accuracy <- map_dbl(cutoff, function(x){
     y_hat <- ifelse(train_set$height > x, "Male", "Female") |> factor(levels = levels(train_set$sex))
-    mean(train_set$sex == y_hat)
+    mean(y_hat == train_set$sex)
 })
 
 df <- data.frame(cutoff = cutoff, accuracy = accuracy)
@@ -98,9 +98,52 @@ cutoff[which.max(accuracy)] # [1] 64
 # apply this cutoff to the test set in order to compute accuracy
 
 y_hat <- ifelse(test_set$height > 64, "Male", "Female") |> factor(levels = levels(test_set$sex))
-mean(test_set$sex == y_hat) # [1] 0.8038095
+mean(y_hat == test_set$sex) # [1] 0.8038095
 
 # overall accuracy observed on the test set is a bit lower but is still really good
+
+```
+
+# Is overall accuracy allways relevant ?
+
+```{r}
+# doesn'it seem strange that best cutoff is a height of 64 whereas
+# 64 is also really close from the mean of the height in the heights dataset?
+
+#   sex     Mean Median    SD
+#   <fct>  <dbl>  <dbl> <dbl>
+# 1 Female  64.9   65.0  3.76
+# 2 Male    69.3   69    3.61
+
+# to understand the fact we can built tabulate each combination of predicted and actual value
+# what is known as the confusion matrix
+
+table(predicted = y_hat, actual = test_set$sex)
+
+         # actual
+# predicted Female Male
+#    Female     48   32
+#    Male       71  374
+
+# if we compute the accuracy for each sex, we can observe a problem
+
+test_set  <- cbind(test_set, y_hat = y_hat)
+
+test_set |> 
+    group_by(sex) |> 
+    summarise(accuracy_by_sex = mean(y_hat == sex))
+
+#   sex    accuracy_by_sex
+#   <fct>            <dbl>
+# 1 Female           0.403
+# 2 Male             0.921
+
+
+# actually we can observe an accuracy of 0.40 for women
+# this bad measurement is outwheigted because of the low prevalance of women in the dataset
+
+prev <- mean(heights$sex == "Female")
+prev # [1] 0.2266667
 
 ```
 
