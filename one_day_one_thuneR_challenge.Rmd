@@ -3669,6 +3669,19 @@ ggplot(demo) +
 
 ```
 
+# Just one tip with regurar expressions begins with / ends with
+
+```{r}
+# begining with 85 "^85"
+# ending with 118 "118$"
+# every character sting in between ".*"
+# and then we combine all the expression "^85.*118$"
+grepl("^85.*118$","85000118") # [1] TRUE ! yes
+
+
+```
+
+
 
 
 
