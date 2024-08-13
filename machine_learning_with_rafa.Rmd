@@ -147,3 +147,72 @@ prev # [1] 0.2266667
 
 ```
 
+# Sensitivity and specificity
+
+```{r}
+# To improve the measurement of how an algorithm is good to predict the actual outcome
+# we can add some other indicators
+# We can start again with the confusion matrix
+
+table(predicted = y_hat, actual =test_set$sex)
+
+
+#          actual
+# predicted Female Male
+#    Female     48   32
+#    Male       71  374
+
+
+
+#         actual |
+# predicted      |y = 1                  | y = 0
+# -----------------------------------------------------------
+# y_hat = 1      |True Positives(TP)     | False Negatives(FP)
+# y_hat = 0      |False Positives(FP)    | True Negatives(TN)
+
+# we need a binary outcome to build such a matrix
+# the choice of what is considered positive outcome y = 1 is arbitrary
+# because the logical behind is symetric
+
+# in the heights dataset case, y = 1 (positive outcome ) is sex is equal to female
+# this is just technical because we need the outcome to be a factor
+# and R ranks "Female" before "Male" just because alphabetical order
+
+# confusionMatrix is a function from the caret package
+
+cm <- confusionMatrix(data = y_hat, reference = test_set$sex)
+str(cm)
+cm$byClass
+
+cm$byClass[c("Sensitivity", "Specificity","Prevalence")]
+# Sensitivity Specificity  Prevalence 
+#   0.4033613   0.9211823   0.2266667 
+
+cm$overall["Accuracy"]
+#  Accuracy 
+# 0.8038095 
+
+# Confusion matrix gives us a lot of metrics
+
+# For the two following metrics we compute by column
+
+# Given the table with TP / FP / FP / TN, 
+# sensitivity is called the True Positive Rate (TPR)
+# The formula is TPR = TP / (TP +  FP)
+48/(48 + 71) # [1] 0.4033613 sensitivty is also called Recall
+
+# specificity is called True negative rate (TNR) 
+# and the formula is TNR = TN / (FN + TN)
+374/(32 +374) # [1] 0.9211823 this measurement of specificity is also called 1-FPR
+
+# Another measurment of specificity is called precision
+# TP / (TP + FN)
+48 / (48 + 32 ) # [1] 0.6
+# precision is also called positive predicted value (PPV)
+# and one last name is Precision (the name given in the confusion matrix)
+# we must notice this ratio is impacted by the prevalence
+# precision depends on prevalence since higher prevalence implies 
+# you can get higher precision even by guessing 
+
+```
+
