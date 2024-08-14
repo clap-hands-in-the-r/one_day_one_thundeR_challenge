@@ -255,3 +255,30 @@ cutoff[which.max(F_1)]
 
 ```
 
+# Summary and comparison of the two previous models
+
+```{r}
+# we label mod1 the model 1 with a cutoff at 64
+y_mod1 <- ifelse(test_set$height > 64, "Male", "Female") |> factor(levels = levels(test_set$sex))
+cm_mod1 <- confusionMatrix(data = y_mod1, reference = test_set$sex)
+
+
+# we label mod2 the model 2 with a cutoff at 66
+y_mod2 <- ifelse(test_set$height > 66, "Male", "Female") |> factor(levels = levels(test_set$sex))
+cm_mod2<- confusionMatrix(data = y_mod2, reference = test_set$sex)
+
+cm_mod1$overall["Accuracy"] # 0.8038095 
+cm_mod2$overall["Accuracy"] # 0.7866667 
+
+cm_mod1$byClass[c("Sensitivity","Specificity","Precision","F1","Balanced Accuracy")]
+      # Sensitivity       Specificity         Precision                F1 Balanced Accuracy 
+      #   0.4033613         0.9211823         0.6000000         0.4824121         0.6622718
+
+cm_mod2$byClass[c("Sensitivity","Specificity","Precision","F1","Balanced Accuracy")]
+      # Sensitivity       Specificity         Precision                F1 Balanced Accuracy 
+      #   0.6302521         0.8325123         0.5244755         0.5725191         0.7313822 
+
+# we accept a lower overall accuracy in favor of a greater balanced accuracy
+
+```
+
