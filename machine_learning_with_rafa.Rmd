@@ -167,8 +167,8 @@ table(predicted = y_hat, actual =test_set$sex)
 #         actual |
 # predicted      |y = 1                  | y = 0
 # -----------------------------------------------------------
-# y_hat = 1      |True Positives(TP)     | False Negatives(FP)
-# y_hat = 0      |False Positives(FP)    | True Negatives(TN)
+# y_hat = 1      |True Positives(TP)     | False Positives(FP)
+# y_hat = 0      |False Negatives(FN)    | True Negatives(TN)
 
 # we need a binary outcome to build such a matrix
 # the choice of what is considered positive outcome y = 1 is arbitrary
@@ -198,11 +198,11 @@ cm$overall["Accuracy"]
 
 # Given the table with TP / FP / FP / TN, 
 # sensitivity is called the True Positive Rate (TPR)
-# The formula is TPR = TP / (TP +  FP)
+# The formula is TPR = TP / (TP +  FN)
 48/(48 + 71) # [1] 0.4033613 sensitivty is also called Recall
 
 # specificity is called True negative rate (TNR) 
-# and the formula is TNR = TN / (FN + TN)
+# and the formula is TNR = TN / (FP + TN)
 374/(32 +374) # [1] 0.9211823 this measurement of specificity is also called 1-FPR
 
 # Another measurment of specificity is called precision
