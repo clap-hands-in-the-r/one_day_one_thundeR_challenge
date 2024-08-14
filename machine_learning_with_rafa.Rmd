@@ -216,3 +216,42 @@ cm$overall["Accuracy"]
 
 ```
 
+# Balanced accuracy
+
+```{r}
+# it's important to watch to both indicators sensitivity and specificity
+# but it could also be useful to have only one metric to measure both 
+# that's why we have a new indicator, the balanced accuracy or FMEAS
+# that will be given by the formula below
+
+#1 / ( 1/2 * recall + 1/2 * precision)
+
+# if we want to give a different weight to recall and to precision,
+# we can use a weighted harmonic average
+# 1/ ( Beta/(1+ Beta) *  recall + 1/(1 + Beta) * precision)
+# the F_meas function in the caret package give a weight of 1 to Beta by default
+
+cutoff <- seq(61,70)
+
+F_1 <- map_dbl(cutoff, function(x){
+    y_hat <- ifelse(train_set$height > x, "Male","Female") |> factor(levels = levels(test_set$sex))
+    F_meas(data = y_hat, reference = train_set$sex)
+}
+)
+
+vis <- data.frame(cutoff = cutoff, F_meas = F_1)
+ggplot(vis, mapping = aes(x = cutoff, y = F_1)) +
+    geom_point() +
+    geom_line()
+
+max(F_1) # [1] 0.6470588
+# we get a max F_meas of 0.64
+cutoff[which.max(F_1)]
+# for a cutoff of 66
+
+# in the previous optimization we based on overall accuracy, we determined a cutoff of 64
+# but 66 will give a best balance between sensitivity and specificity
+
+
+```
+
