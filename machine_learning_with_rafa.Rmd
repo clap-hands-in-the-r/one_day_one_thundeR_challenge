@@ -414,5 +414,108 @@ table(predicted = y_hat, actual = test_set$sex)
 # and our false positive rate is very very high and close to 1
 # we are almost certain to be wrong when predicting male with this cutoff
 
+
+```
+
+# Reversing our positive and negative case - impact on the ROC curve
+
+```{r}
+
+probs <- seq(0,1, by = 0.1)
+n <- length(test_index)
+guessing_meth_y_female <- map_df(probs,
+                   function(p){
+                      y_hat <-  sample(c("Male","Female"), size = n, replace = TRUE, prob = c(p,1-p))|>
+                          factor(levels = c("Female","Male"))
+                       list(
+                           method = "guessing",
+                           y_positive_is = "y_positive=female",
+                           cutoff = p,
+                           FPR = 1 - specificity(y_hat, test_set$sex),
+                           TPR = sensitivity(y_hat, test_set$sex)
+                       )
+                       
+                   })
+
+the_height <- c(50,seq(59,75, by =1), 80)
+height_meth_y_female <- map_df(the_height, function(x){
+    y_hat <- ifelse(test_set$height > x, "Male","Female") |> factor(levels = levels(test_set$sex))
+    list(
+        method = "height",
+        y_positive_is = "y_positive=female",
+        cutoff = x,
+        FPR = 1 - specificity(y_hat, test_set$sex),
+        TPR = sensitivity(y_hat, test_set$sex)
+    )
+    
+}
+)
+
+guessing_meth_y_male <- map_df(probs,
+                   function(p){
+                      y_hat <-  sample(c("Male","Female"), size = n, replace = TRUE, prob = c(p,1-p))|>
+                          factor(levels = c("Male","Female"))
+                       list(
+                           method = "guessing",
+                           y_positive_is = "y_positive=male",
+                           cutoff = p,
+                           FPR = 1 - specificity(y_hat, test_set$sex |> factor(levels = c("Male","Female"))),
+                           TPR = sensitivity(y_hat, test_set$sex |> factor(levels = c("Male","Female")))
+                       )
+                       
+                   })
+
+height_meth_y_male <- map_df(the_height, function(x){
+    y_hat <- ifelse(test_set$height > x, "Male","Female") |> factor(levels = c("Male","Female"))
+    list(
+        method = "height",
+        y_positive_is = "y_positive=male",
+        cutoff = x,
+        FPR = 1 - specificity(y_hat, test_set$sex |> factor(levels = c("Male","Female"))),
+        TPR = sensitivity(y_hat, test_set$sex |> factor(levels = c("Male","Female")))
+    )
+    
+}
+)
+
+comparing_4_meth <- rbind(guessing_meth_y_female, 
+                          height_meth_y_female, 
+                          guessing_meth_y_male,
+                          height_meth_y_male)
+
+
+ggplot(data = comparing_4_meth, aes(x = FPR, y = TPR, color = method))+
+    geom_point()+
+    geom_line()+
+    geom_text(label = comparing_4_meth$cutoff, nudge_y = 0.09)+
+    facet_wrap(~ y_positive_is)
+
+
+# we can visualize the ROC curve remains the same in both cases
+
+
+# if we focus on height cutoff method
+ggplot(data = comparing_4_meth |> filter(method =="height"), aes(x = FPR, y = TPR))+
+    geom_point(colour = "blue")+
+    geom_line(colour = "blue")+
+    geom_text(label = comparing_4_meth$cutoff[comparing_4_meth$method == "height"], nudge_y = 0.09)+
+    facet_wrap(~ y_positive_is)
+
+
+ggplot(data = comparing_4_meth |> filter(method =="height"), aes(x = FPR, y = TPR))+
+    geom_point(colour = "blue")+
+    geom_line(colour = "blue")+
+    #geom_text(label = comparing_4_meth$cutoff[comparing_4_meth$method == "height"], nudge_y = 0.09)+
+    facet_wrap(~ y_positive_is)
+
+
+# Compare both curves on the same graph
+ggplot(data = comparing_4_meth |> filter(method =="height"), aes(x = FPR, y = TPR, colour = y_positive_is))+
+    geom_point()+
+    geom_line()
+
+
+
+
 ```
 
