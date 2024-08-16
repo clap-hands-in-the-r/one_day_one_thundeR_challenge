@@ -282,3 +282,137 @@ cm_mod2$byClass[c("Sensitivity","Specificity","Precision","F1","Balanced Accurac
 
 ```
 
+# ROC (receiver operating characteristic) curves
+
+```{r}
+# in our two previous models, predicting through a cutoff in the height clearly outperformed
+# method of guessing, but we only tested guessing with a prob of 0.5
+# we will now try with guessing with a prob of 0.9
+
+
+p1 <- 0.9
+y_hat_dot9 <- sample(c("Male","Female"), size = length(test_index), replace = TRUE, prob = c(p1, 1-p1)) |> 
+    factor(levels = levels(test_set$sex))
+mean(y_hat_dot9 == test_set$sex) # [1] 0.7219048
+# we get a far better accuracy than with .5
+
+p2 <- 0.5
+y_hat_dot5 <- sample(c("Male","Female"), size = length(test_index), replace = TRUE, prob = c(p2, 1-p2)) |> 
+    factor(levels = levels(test_set$sex))
+mean(y_hat_dot5 == test_set$sex) # [1] 0.512381
+
+cm <- function(x) {confusionMatrix(data = x, reference = test_set$sex)}
+
+cm_dot5 <- cm(y_hat_dot5)
+cm_dot9 <- cm(y_hat_dot9)
+
+cm_dot5$overall["Accuracy"]
+# Accuracy 
+# 0.512381 
+
+cm_dot9$overall["Accuracy"]
+# Accuracy 
+# 0.727619
+
+cm_dot5$byClass[c("Sensitivity","Specificity")]
+# Sensitivity Specificity 
+#   0.5378151   0.5049261 
+
+cm_dot9$byClass[c("Sensitivity","Specificity")]
+# Sensitivity Specificity 
+#   0.1092437   0.9088670 
+
+# we see that the best accuracy we gain with .9 comes at the cost of falling sensitivity
+
+# we can plot the datas in order to see how we balance sensitivity and specificity
+
+probs <- seq(0,1, by = 0.1)
+n <- length(test_index)
+
+
+guessing_meth <- map_df(probs,
+                   function(p){
+                      y_hat <-  sample(c("Male","Female"), size = n, replace = TRUE, prob = c(p,1-p))|>
+                          factor(levels = c("Female","Male"))
+                       list(
+                           method = "guessing",
+                           cutoff = p,
+                           FPR = 1 - specificity(y_hat, test_set$sex),
+                           TPR = sensitivity(y_hat, test_set$sex)
+                       )
+                       
+                   })
+
+ggplot(guessing_meth, mapping = aes(x = FPR, y = TPR)) +
+    geom_point() +
+    geom_line() +
+    geom_text(
+        label = guessing_meth$cutoff,
+        # nudge_x = 0.25,
+        nudge_y = -0.09
+        # check_overlap = T
+    )
+
+
+the_height <- c(50,seq(59,75, by =1), 80)
+height_meth <- map_df(the_height, function(x){
+    y_hat <- ifelse(test_set$height > x, "Male","Female") |> factor(levels = levels(test_set$sex))
+    list(
+        method = "height",
+        
+        cutoff = x,
+        FPR = 1 - specificity(y_hat, test_set$sex),
+        TPR = sensitivity(y_hat, test_set$sex)
+    )
+    
+}
+)
+
+comparing_2_meth <- rbind(guessing_meth,height_meth)
+
+
+ggplot(comparing_2_meth, aes(x = FPR, y = TPR, colour = method))+
+    geom_point()+
+    geom_line()+
+    geom_text(label=comparing_2_meth$cutoff, nudge_y = 0.09)
+
+# We can see that for each value of False positive rate (FPR), 
+# the true positive rate (TPR) of height cutoff method is better than 
+# the TPR with the guessing method
+
+
+# understanding deeper TPR and FPR with exemple of an extreme cutoff seize 80
+
+y_hat <- ifelse(test_set$height > 80, "Male", "Female" ) |> factor(levels = levels(test_set$sex))
+cm <- confusionMatrix(data = y_hat, reference = test_set$sex)
+cm$overall["Accuracy"]
+#  Accuracy 
+# 0.2304762
+cm$byClass[c("Sensitivity", "Specificity")]
+# Sensitivity Specificity 
+# 1.000000000 0.004926108 
+
+# we see that sensitvity ie the probability of predicting positive when actually positive
+# is 100% but specificity ie the probability of prediction negative when actually negative
+# is absolutely very very low / in our case study, we recall that given female comes before male in 
+# alphabetical order, predicting positive is predicting female and predicting negative is predicting female
+
+
+table(predicted = y_hat, actual = test_set$sex)
+#          actual
+# predicted Female Male
+#    Female    119  404
+#    Male        0    2
+
+# given our very high height cutoff, we only predict two individuals 
+# as male
+# that's why precision (in this case, predicting male when actual male = True negatives) is 
+# very low
+# we can recalculate our specifity manually with formula TN/(TN + FP)
+2 /( 404 +2)
+# [1] 0.004926108 
+# and our false positive rate is very very high and close to 1
+# we are almost certain to be wrong when predicting male with this cutoff
+
+```
+
