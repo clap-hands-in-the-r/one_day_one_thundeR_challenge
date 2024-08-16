@@ -515,7 +515,83 @@ ggplot(data = comparing_4_meth |> filter(method =="height"), aes(x = FPR, y = TP
     geom_line()
 
 
-
-
 ```
+
+# When prevalence matters use precision recall curves instead ROC 
+
+```{r}
+n <- length(test_index)
+probs <- seq(0,1, by = 0.1)
+
+guessing_meth_y_female <- map_df(probs, function(p){
+    y_hat <- sample(c("Male","Female"), size = n, prob = c(p, 1-p), replace = TRUE) |> 
+        factor(levels = levels(test_set$sex))
+    list(
+        method = "guessing",
+        y_positive_is = "y_positive=female",
+        cutoff = p,
+        recall = sensitivity(data = y_hat, reference = test_set$sex),
+        precision = precision(data = y_hat, reference = test_set$sex)
+    )
+}
+                   )
+
+the_height <- c(50,seq(59,75, by =1), 80)
+height_meth_y_female <- map_df(the_height, function(x){
+    y_hat <- ifelse(test_set$height > x, "Male","Female") |> 
+        factor(levels = levels(test_set$sex))
+    list(
+        method = "height",
+        y_positive_is = "y_positive=female",
+        cutoff = x,
+        recall = sensitivity(data = y_hat, reference = test_set$sex),
+        precision = precision(data = y_hat, reference = test_set$sex)
+    )
+}
+                   )
+
+guessing_meth_y_male <- map_df(probs, function(p){
+    y_hat <- sample(c("Male","Female"), size = n, prob = c(p, 1-p), replace = TRUE) |> 
+        factor(levels = c("Male","Female"))
+    list(
+        method = "guessing",
+        y_positive_is = "y_positive=male",
+        cutoff = p,
+        recall = sensitivity(data = y_hat, reference = test_set$sex |> factor(levels = c("Male","Female"))),
+        precision = precision(data = y_hat, reference = test_set$sex |> factor(levels = c("Male","Female")))
+    )
+}
+                   )
+
+height_meth_y_male <- map_df(the_height, function(x){
+    y_hat <- ifelse(test_set$height > x, "Male","Female") |> 
+        factor(levels = c("Male","Female"))
+    list(
+        method = "height",
+        y_positive_is = "y_positive=male",
+        cutoff = x,
+        recall = sensitivity(data = y_hat, reference = test_set$sex |> factor(levels = c("Male","Female"))),
+        precision = precision(data = y_hat, reference = test_set$sex |> factor(levels = c("Male","Female")))
+    )
+}
+                   )
+
+
+prec_recall_df <- rbind(guessing_meth_y_female,
+                        guessing_meth_y_male,
+                        height_meth_y_female,
+                        height_meth_y_male)
+
+View(prec_recall_df)
+
+
+ggplot(prec_recall_df, aes(x = recall, y = precision, color = method))+
+    geom_point()+
+    geom_line()+
+    facet_wrap(~ y_positive_is)+
+    geom_text(label = prec_recall_df$cutoff, nudge_y = 0.09 )
+
+    
+```
+
 
