@@ -594,4 +594,65 @@ ggplot(prec_recall_df, aes(x = recall, y = precision, color = method))+
     
 ```
 
+# Return to GaltonFamilies and conditional expectations
+
+```{r}
+library(tidyverse)
+library(HistData)
+data("GaltonFamilies")
+
+head(GaltonFamilies)
+
+set.seed(1983)
+galton_heights <- GaltonFamilies |>
+  filter(gender == "male") |>
+  group_by(family) |>
+  sample_n(1) |>
+  ungroup() |>
+  select(father, childHeight) |>
+  rename(son = childHeight)
+
+head(galton_heights)
+
+sum(galton_heights$father == 72) # 1] 8
+sum(galton_heights$father == 72.5) # [1] 1
+
+galton_heights |> filter(round(father) == 72) |> nrow() # [1] 14
+
+sum(round(galton_heights$father)==72) # [1] 14
+
+data("heights")
+
+dat <- heights |> 
+    filter(sex == "Male") |> 
+    mutate(height_strata = (round(height))) |> 
+    group_by(height_strata) |> 
+    summarize(n = n()) |> 
+    ungroup() |> 
+    mutate(p = n / sum(n))
+
+dat |> ggplot(aes(x=height_strata, y = p))+
+    geom_point()+
+    geom_line()
+
+View(dat)
+sum(dat$p)
+
+
+cond_avg <- galton_heights |> 
+    filter(round(father) == 72) |> 
+    summarize(avg = sum(son)/n()) |> 
+    pull(avg)
+cond_avg    
+
+
+galton_heights |> 
+    mutate(father_strata = factor(round(father))) |> 
+    group_by(father_strata) |> 
+    ggplot(aes(x = father_strata, y = son, father_strata)) +
+    geom_boxplot() +
+    geom_point()
+    
+
+```
 
