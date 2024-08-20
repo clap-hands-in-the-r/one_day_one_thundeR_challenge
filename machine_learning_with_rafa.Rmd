@@ -705,3 +705,64 @@ mean(disease[test==1]==1)/mean(disease==1)
 
 ```
 
+# Conditional probs exercices part 2
+
+
+```{r}
+
+library(dslabs)
+data("heights")
+
+# C'est bien ça la proba d'être un homme sachant taille = x
+dat <- heights |>  
+    mutate(height = round(height)) |> 
+    group_by(height) |> 
+        summarize(p = mean(sex == "Male")) |> as.data.frame()
+
+# ici que je pensais juste, mais je me trompais, je calcule la proba d"être d'une taille x sachant que je suis un homme... 
+dat2 <- heights |>  
+    filter(sex == "Male") |> 
+    mutate(height = round(height)) |> 
+    group_by(height) |> 
+        summarize(n = n()) |> 
+    ungroup() |> 
+    mutate(p = n/sum(n))
+
+
+
+qplot(height, p, data = dat)
+
+qplot(height, p, data = dat2)
+
+zz <- cut(heights$height, quantile(heights$height, seq(0,1,0.1)), include.lowest = TRUE)
+
+ps <- seq(0, 1, 0.1)
+
+heights %>% 
+	mutate(g = cut(height, quantile(height, ps), include.lowest = TRUE)) %>%
+	group_by(g) %>%
+	summarize(p = mean(sex == "Male"), height = mean(height)) %>%
+	qplot(height, p, data =.)
+
+
+
+Sigma <- 9*matrix(c(1,0.5,0.5,1), 2, 2)
+dat <- MASS::mvrnorm(n = 10000, c(69, 69), Sigma) %>%
+	data.frame() %>% setNames(c("x", "y"))
+
+
+ps <- seq(0, 1, 0.1)
+dat %>% 
+	# MISSING CODE
+	qplot(x, y, data =.)
+
+
+dat |> 
+    mutate(g = cut(x, quantile(x,ps),include.lowest = TRUE)) |>
+    group_by(g) |> 
+    summarize(y = mean(y), x = mean(x)) |> 
+    ggplot(aes(x,y))+geom_point()
+    
+
+```
+
